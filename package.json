@@ -4,6 +4,7 @@
   "description": "🌌 The World's First Quantum Testing System - Test your apps in parallel universes",
   "main": "index.js",
   "types": "index.d.ts",
+  "bin": { "libero-init": "scripts/libero-init.js" },
   "keywords": [
     "testing",
     "qa",
@@ -52,7 +53,7 @@
     "neuro:universal": "ts-node server/neuro-core-universal.ts",
     "neuro:build": "tsc libero-neuro-core.ts --outDir dist",
     "neuro:prod": "node dist/libero-neuro-core.js",
-    "libero:init": "node scripts/init.js",
+    "libero:init": "node scripts/libero-init.js",
     "libero:upgrade": "npm install libero-quantum@latest",
     "docs:serve": "npx docsify serve docs",
     "build": "tsc",

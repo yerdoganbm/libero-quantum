@@ -6,6 +6,38 @@
 
 ---
 
+## 🚀 QUICK START – 2 SATIR ENTEGRASYON (Neuro Core)
+
+API key **opsiyonel** – yoksa dev modda event’ler localStorage’da kuyruğa alınır.
+
+### React
+```jsx
+import { initNeuroCore } from './packages/react/useNeuroCore-universal';
+initNeuroCore({ appName: 'myapp' });
+```
+
+### Vue
+```js
+import { initNeuroCore } from './lib/neuro-core-vue';
+initNeuroCore({ appName: 'myapp' });
+```
+
+### Vanilla / herhangi bir site (1 satır)
+```html
+<script src="https://cdn.jsdelivr.net/gh/yerdoganbm/libero-quantum@main/dist/neuro.js" data-app="myapp"></script>
+```
+
+### Tek komutla kurulum
+```bash
+npx libero-init
+```
+Proje kökünde çalıştırın; framework tespit edilir, `.env.example` ve entegrasyon dosyası oluşturulur.
+
+### Entegrasyon kontrolü
+Tarayıcı konsolunda: `Neuro.check()` veya `Neuro.ready()` → kuyruk ve bağlantı durumu.
+
+---
+
 ## 🎯 EXECUTIVE SUMMARY
 
 Libero v4.0 represents a **paradigm shift** in software testing. It's not a tool—it's an **autonomous intelligence** that understands, predicts, and evolves. While Sentinel OMEGA (v3.0) pushed boundaries, **Libero v4.0 transcends them entirely**.

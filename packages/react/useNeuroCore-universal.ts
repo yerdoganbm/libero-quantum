@@ -21,19 +21,26 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 // CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════
 
+const LIBERO_CLOUD = 'https://api.libero.dev/api';
+const NEURO_QUEUE_KEY = 'neuro_queue';
+const MAX_QUEUE = 500;
+
 interface NeuroConfig {
   apiUrl?: string;
+  apiKey?: string;
   appName: string;
   appVersion?: string;
   enabled?: boolean;
   debug?: boolean;
+  autocapture?: boolean;
 }
 
 let globalConfig: NeuroConfig = {
   apiUrl: 'http://localhost:3001/api',
   appName: 'unknown',
   enabled: true,
-  debug: false
+  debug: false,
+  autocapture: true
 };
 
 /**
@@ -50,10 +57,68 @@ let globalConfig: NeuroConfig = {
  */
 export function initNeuroCore(config: NeuroConfig) {
   globalConfig = { ...globalConfig, ...config };
-  
+  if (config.apiKey && !config.apiUrl) (globalConfig as any).apiUrl = config.apiKey;
+  if (config.apiUrl) (globalConfig as any).apiUrl = config.apiUrl;
   if (globalConfig.debug) {
     console.log('🧠 Neuro-Core initialized:', globalConfig);
   }
+}
+
+function getQueue(): any[] {
+  try {
+    const q = typeof localStorage !== 'undefined' ? localStorage.getItem(NEURO_QUEUE_KEY) : null;
+    return q ? JSON.parse(q) : [];
+  } catch { return []; }
+}
+
+function setQueue(arr: any[]) {
+  try {
+    if (typeof localStorage !== 'undefined') localStorage.setItem(NEURO_QUEUE_KEY, JSON.stringify(arr.slice(-MAX_QUEUE)));
+  } catch {}
+}
+
+function enqueue(payload: any) {
+  const q = getQueue();
+  q.push({ t: Date.now(), payload });
+  setQueue(q);
+  if (globalConfig.debug) console.log('Neuro (dev):', q.length, 'events in queue');
+}
+
+let lastFlushAt = 0;
+
+export function flushNeuroQueue(): Promise<void> {
+  const url = globalConfig.apiUrl;
+  if (!url) return Promise.resolve();
+  const q = getQueue();
+  if (q.length === 0) return Promise.resolve();
+  setQueue([]);
+  lastFlushAt = Date.now();
+  const appName = globalConfig.appName;
+  const sessionId = getSessionId();
+  q.forEach(({ payload }: any) => {
+    fetch(`${url}/synapse`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...payload, appName, sessionId })
+    }).catch(() => enqueue(payload));
+  });
+  return Promise.resolve();
+}
+
+export function setNeuroApiUrl(apiUrl: string) {
+  (globalConfig as any).apiUrl = apiUrl;
+  return flushNeuroQueue();
+}
+
+export function checkDiagnostics(): { queued: number; connected: boolean; appName: string; message: string } {
+  const q = getQueue();
+  const connected = !!globalConfig.apiUrl;
+  return {
+    queued: q.length,
+    connected,
+    appName: globalConfig.appName,
+    message: connected ? (q.length ? `${q.length} events in queue` : 'OK') : `Dev mode: ${q.length} events queued. Set apiUrl to send.`
+  };
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -490,25 +555,27 @@ function getSessionId(): string {
 }
 
 /**
- * Send synapse to server
+ * Send synapse to server (or queue when no apiUrl / offline)
  */
 async function sendSynapse(data: any) {
   if (!globalConfig.enabled) return;
+  const url = globalConfig.apiUrl;
+  const payload = { ...data, appName: globalConfig.appName, appVersion: globalConfig.appVersion };
 
+  if (!url) {
+    enqueue(payload);
+    return;
+  }
   try {
-    await fetch(`${globalConfig.apiUrl}/synapse`, {
+    const res = await fetch(`${url}/synapse`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...data,
-        appName: globalConfig.appName,
-        appVersion: globalConfig.appVersion
-      })
+      body: JSON.stringify(payload)
     });
+    if (!res.ok) enqueue(payload);
   } catch (err) {
-    if (globalConfig.debug) {
-      console.error('Neuro-Core: Failed to send synapse', err);
-    }
+    enqueue(payload);
+    if (globalConfig.debug) console.error('Neuro-Core: Failed to send synapse', err);
   }
 }
 
@@ -606,7 +673,25 @@ export async function createABTest(
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// HOOK 7: HEATMAP CLICK TRACKING (Full server)
+// HOOK 7: AUTOCAPTURE (varsayılan açık – sayfa + tıklama)
+// ═══════════════════════════════════════════════════════════════════════
+
+export function useNeuroAutocapture(userId: string | undefined, options?: { screen?: string }) {
+  useEffect(() => {
+    if (!globalConfig.enabled || globalConfig.autocapture === false) return;
+    const screen = options?.screen || (typeof window !== 'undefined' ? window.location?.pathname || 'unknown' : 'unknown');
+    sendSynapse({
+      userId: userId || 'anon',
+      sessionId: getSessionId(),
+      action: 'screen_view',
+      screen,
+      duration: 0
+    });
+  }, [userId, options?.screen]);
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// HOOK 8: HEATMAP CLICK TRACKING (Full server)
 // ═══════════════════════════════════════════════════════════════════════
 
 export function useNeuroHeatmap(screen: string) {
@@ -628,7 +713,7 @@ export function useNeuroHeatmap(screen: string) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// HOOK 8: SESSION REPLAY (Full server)
+// HOOK 9: SESSION REPLAY (Full server)
 // ═══════════════════════════════════════════════════════════════════════
 
 export function useNeuroReplay() {
@@ -656,10 +741,14 @@ export default {
   useNeuroAnalytics,
   useRageDetection,
   useFormAnalytics,
+  useNeuroAutocapture,
   useNeuroHeatmap,
   useNeuroReplay,
   trackEvent,
   trackError,
   trackPerformance,
-  createABTest
+  createABTest,
+  checkDiagnostics,
+  flushNeuroQueue,
+  setNeuroApiUrl
 };
