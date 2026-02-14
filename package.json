@@ -1,0 +1,75 @@
+{
+  "name": "libero-quantum",
+  "version": "5.0.0",
+  "description": "🌌 The World's First Quantum Testing System - Test your apps in parallel universes",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "keywords": [
+    "testing",
+    "qa",
+    "automation",
+    "quantum",
+    "ai",
+    "gpt-4",
+    "playwright",
+    "appium",
+    "blockchain",
+    "web3",
+    "machine-learning",
+    "self-healing",
+    "predictive",
+    "omniscient"
+  ],
+  "author": "AI Architect <ynserdgnbm@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yerdoganbm/libero-quantum.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yerdoganbm/libero-quantum/issues"
+  },
+  "homepage": "https://libero-quantum.dev",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:v4": "playwright test libero-v4-core.spec.ts --headed",
+    "test:v5": "playwright test libero-v5-quantum.spec.ts --headed",
+    "test:omniscient": "playwright test libero-v4-core.spec.ts -g 'SINGULARITY' --headed",
+    "test:quantum": "playwright test libero-v5-quantum.spec.ts -g 'Quantum Leap' --headed",
+    "test:neural": "playwright test libero-v5-quantum.spec.ts -g 'Neural' --headed",
+    "test:temporal": "playwright test libero-v5-quantum.spec.ts -g 'Temporal' --headed",
+    "test:consciousness": "playwright test libero-v5-quantum.spec.ts -g 'Consciousness' --headed",
+    "libero:security": "playwright test libero-v4-core.spec.ts -g 'Guardian' --reporter=json > security-report.json",
+    "libero:predict": "playwright test libero-v4-core.spec.ts -g 'Oracle' --reporter=json > predictive-report.json",
+    "libero:init": "node scripts/init.js",
+    "libero:upgrade": "npm install libero-quantum@latest",
+    "docs:serve": "npx docsify serve docs",
+    "build": "tsc",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"**/*.{ts,js,json,md}\"",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^10.3.0",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^22.19.11",
+    "@types/js-yaml": "^4.0.5",
+    "typescript": "~5.8.2",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "husky": "^9.0.0"
+  },
+  "peerDependencies": {
+    "playwright": "^1.40.0"
+  },
+  "optionalDependencies": {
+    "appium": "^2.0.0",
+    "ethers": "^6.0.0"
+  }
+}
