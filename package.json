@@ -46,6 +46,7 @@
     "libero:predict": "playwright test libero-v4-core.spec.ts -g 'Oracle' --reporter=json > predictive-report.json",
     "neuro:start": "ts-node libero-neuro-core.ts",
     "neuro:dev": "nodemon --exec ts-node libero-neuro-core.ts",
+    "neuro:server": "ts-node server/neuro-core-server.ts",
     "neuro:full": "ts-node server/neuro-core-full.ts",
     "neuro:full:dev": "nodemon --exec ts-node server/neuro-core-full.ts",
     "neuro:universal": "ts-node server/neuro-core-universal.ts",
