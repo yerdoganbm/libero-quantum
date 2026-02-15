@@ -18,8 +18,10 @@ export async function runCommand(options: { plan?: string; headless?: boolean })
     process.exit(1);
   }
 
-  // Load test plan
-  const planPath = options.plan || path.join(process.cwd(), '.libero', 'test-plans', 'smoke.json');
+  // Load test plan (prefer full.json, fallback to smoke.json)
+  const defaultPlanPath = path.join(process.cwd(), '.libero', 'test-plans', 'full.json');
+  const fallbackPlanPath = path.join(process.cwd(), '.libero', 'test-plans', 'smoke.json');
+  const planPath = options.plan || (readJson<TestPlan>(defaultPlanPath) ? defaultPlanPath : fallbackPlanPath);
   const plan = readJson<TestPlan>(planPath);
   
   if (!plan) {

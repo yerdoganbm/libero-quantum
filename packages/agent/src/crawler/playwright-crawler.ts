@@ -53,7 +53,7 @@ export class PlaywrightCrawler {
 
       // Extract elements
       const elements = await this.extractElements(page);
-      const forms = await this.extractForms();
+      const forms = await this.extractForms(page);
       
       // Create node
       const nodeId = this.normalizeUrl(url);
@@ -162,9 +162,113 @@ export class PlaywrightCrawler {
     return elements;
   }
 
-  private async extractForms(): Promise<any[]> {
-    // Simplified for M1
-    return [];
+  private async extractForms(page: Page): Promise<any[]> {
+    const forms = await page.evaluate(() => {
+      const formElements = Array.from(document.querySelectorAll('form'));
+      return formElements.map((form, idx) => {
+        const inputs = Array.from(form.querySelectorAll('input, textarea, select'));
+        const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]') || 
+                         form.querySelector('button:not([type="button"])');
+        
+        const fields = inputs.map(input => {
+          const inp = input as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+          return {
+            tag: input.tagName.toLowerCase(),
+            type: inp.type || 'text',
+            name: inp.name || inp.id || '',
+            id: inp.id || '',
+            placeholder: (inp as HTMLInputElement).placeholder || '',
+            required: (inp as HTMLInputElement).required || false,
+            testId: input.getAttribute('data-testid') || '',
+            label: (input as HTMLInputElement).labels?.[0]?.textContent?.trim() || '',
+          };
+        });
+        
+        return {
+          index: idx,
+          testId: form.getAttribute('data-testid') || '',
+          id: form.id || '',
+          action: form.action || '',
+          method: form.method || 'POST',
+          fields,
+          hasSubmit: !!submitBtn,
+          submitTestId: submitBtn?.getAttribute('data-testid') || '',
+        };
+      });
+    });
+
+    return forms.map((form: any) => {
+      const fields = form.fields.map((f: any) => ({
+        name: f.name || f.id || `field-${f.tag}-${Math.random().toString(36).slice(2, 8)}`,
+        type: this.mapInputType(f.type, f.tag),
+        selector: {
+          primary: f.testId ? `[data-testid="${f.testId}"]` : f.id ? `#${f.id}` : f.name ? `[name="${f.name}"]` : `${f.tag}[placeholder="${f.placeholder}"]`,
+          fallbacks: [],
+          stability: 0.6,
+          type: f.testId ? 'data-testid' : 'css',
+        },
+        required: f.required,
+        placeholder: f.placeholder,
+        label: f.label,
+      }));
+
+      const submitButton = form.hasSubmit ? {
+        id: generateId('btn'),
+        role: 'button',
+        name: 'Submit',
+        selector: {
+          primary: form.submitTestId ? `[data-testid="${form.submitTestId}"]` : `button[type="submit"]`,
+          fallbacks: [],
+          stability: 0.7,
+          type: form.submitTestId ? 'data-testid' : 'css',
+        },
+        type: 'button' as const,
+        attributes: { type: 'submit' },
+        confidence: 0.9,
+      } : undefined;
+
+      return {
+        id: generateId('form'),
+        selector: {
+          primary: form.testId ? `[data-testid="${form.testId}"]` : form.id ? `#${form.id}` : `form:nth-of-type(${form.index + 1})`,
+          fallbacks: [],
+          stability: 0.6,
+          type: form.testId ? 'data-testid' : 'css',
+        },
+        fields,
+        submitButton,
+        validationRules: this.inferValidationRules(fields),
+      };
+    });
+  }
+
+  private mapInputType(type: string, tag: string): any {
+    const map: Record<string, any> = {
+      'email': 'email',
+      'password': 'password',
+      'tel': 'tel',
+      'number': 'number',
+      'url': 'url',
+      'date': 'date',
+      'checkbox': 'checkbox',
+      'radio': 'radio',
+    };
+    if (tag === 'select') return 'select';
+    if (tag === 'textarea') return 'text';
+    return map[type] || 'text';
+  }
+
+  private inferValidationRules(fields: any[]): any[] {
+    const rules: any[] = [];
+    for (const field of fields) {
+      if (field.required) {
+        rules.push({ field: field.name, rule: 'required' });
+      }
+      if (field.type === 'email') {
+        rules.push({ field: field.name, rule: 'email' });
+      }
+    }
+    return rules;
   }
 
   private async extractLinks(page: Page, baseUrl: string): Promise<Array<{ url: string; element: ElementDescriptor }>> {

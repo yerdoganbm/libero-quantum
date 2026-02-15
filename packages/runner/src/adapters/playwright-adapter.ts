@@ -187,6 +187,17 @@ export class PlaywrightAdapter {
         await page.locator(fillTarget).fill(String(step.value), { timeout });
         break;
 
+      case 'select':
+        const selectTarget = this.resolveSelector(step.target);
+        await page.locator(selectTarget).selectOption(String(step.value), { timeout });
+        break;
+
+      case 'check':
+        // For checkbox/radio
+        const checkTarget = this.resolveSelector(step.target);
+        await page.locator(checkTarget).check({ timeout });
+        break;
+
       case 'wait':
         await page.waitForTimeout(step.options?.timeout || 1000);
         break;

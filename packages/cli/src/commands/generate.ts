@@ -2,12 +2,12 @@
  * libero generate - Generate test plans
  */
 
-import { AppGraph } from '@libero/core';
-import { logger, readJson, writeJson } from '@libero/core';
-import { SmokeGenerator } from '@libero/generator';
+import { AppGraph, TestSuite } from '@libero/core';
+import { logger, readJson, writeJson, generateId } from '@libero/core';
+import { SmokeGenerator, FormGenerator } from '@libero/generator';
 import * as path from 'path';
 
-export async function generateCommand(options: { seed?: number }): Promise<void> {
+export async function generateCommand(options: { seed?: number; type?: string }): Promise<void> {
   logger.info('Generating test plans...');
 
   // Load AppGraph
@@ -19,16 +19,56 @@ export async function generateCommand(options: { seed?: number }): Promise<void>
     process.exit(1);
   }
 
+  const suites: TestSuite[] = [];
+  const types = options.type ? options.type.split(',') : ['smoke', 'form'];
+
   // Generate smoke tests
-  const smokeGen = new SmokeGenerator();
-  const plan = smokeGen.generate(graph, { seed: options.seed });
+  if (types.includes('smoke')) {
+    const smokeGen = new SmokeGenerator();
+    const smokePlan = smokeGen.generate(graph, { seed: options.seed });
+    suites.push(...smokePlan.suites);
+  }
+
+  // Generate form tests
+  if (types.includes('form')) {
+    const formGen = new FormGenerator();
+    const formTests = formGen.generate(graph);
+    if (formTests.length > 0) {
+      suites.push({
+        id: generateId('suite'),
+        name: 'Form Tests',
+        category: 'regression',
+        tests: formTests,
+        tags: ['form', 'validation'],
+      });
+    }
+  }
+
+  const plan = {
+    version: '6.0.0',
+    appName: graph.appName,
+    timestamp: new Date().toISOString(),
+    suites,
+    config: {
+      seed: options.seed || Date.now(),
+      coverageTarget: {
+        routes: graph.nodes.length,
+        interactiveElements: 0,
+        assertions: 0,
+      },
+      flakyRetries: 2,
+      screenshotOnFail: true,
+      videoOnFail: false,
+      traceOnFail: true,
+    },
+  };
 
   // Save
-  const planPath = path.join(process.cwd(), '.libero', 'test-plans', 'smoke.json');
+  const planPath = path.join(process.cwd(), '.libero', 'test-plans', 'full.json');
   writeJson(planPath, plan);
 
   logger.success(`TestPlan saved: ${planPath}`);
   logger.info(`  Suites: ${plan.suites.length}`);
   logger.info(`  Tests: ${plan.suites.reduce((sum, s) => sum + s.tests.length, 0)}`);
-  logger.info(`  Coverage target: ${plan.config.coverageTarget.routes} routes`);
+  logger.info(`  Types: ${types.join(', ')}`);
 }

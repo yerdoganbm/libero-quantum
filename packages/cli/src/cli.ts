@@ -33,7 +33,11 @@ program
   .command('generate')
   .description('Generate test plans from AppGraph')
   .option('-s, --seed <number>', 'Random seed for deterministic tests')
-  .action((opts) => generateCommand({ seed: opts.seed ? parseInt(opts.seed) : undefined }));
+  .option('-t, --type <types>', 'Test types: smoke,form,journey (default: smoke,form)')
+  .action((opts) => generateCommand({ 
+    seed: opts.seed ? parseInt(opts.seed) : undefined,
+    type: opts.type,
+  }));
 
 program
   .command('run')

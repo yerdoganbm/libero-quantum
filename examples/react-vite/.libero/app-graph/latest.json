@@ -2,7 +2,7 @@
   "version": "6.0.0",
   "appName": "react-vite",
   "baseUrl": "http://localhost:5174",
-  "timestamp": "2026-02-15T08:18:46.564Z",
+  "timestamp": "2026-02-15T08:35:58.961Z",
   "framework": "react",
   "nodes": [
     {
@@ -13,7 +13,7 @@
       "name": "Welcome to Libero Test App",
       "elements": [
         {
-          "id": "el-mlnh4gzm-mfkjjc",
+          "id": "el-mlnhqllz-y6fhh0",
           "role": "button",
           "name": "Get Started →",
           "selector": {
@@ -31,7 +31,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4gzx-okhqer",
+          "id": "el-mlnhqlmk-q2dzh5",
           "role": "link",
           "name": "Home",
           "selector": {
@@ -49,7 +49,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4h03-kw0vdu",
+          "id": "el-mlnhqlmz-wtjcm4",
           "role": "link",
           "name": "About",
           "selector": {
@@ -67,7 +67,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4h0a-5sq241",
+          "id": "el-mlnhqlnc-5vrwni",
           "role": "link",
           "name": "Contact",
           "selector": {
@@ -85,7 +85,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4h0g-wyy09b",
+          "id": "el-mlnhqlno-ot263l",
           "role": "link",
           "name": "Dashboard",
           "selector": {
@@ -103,7 +103,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4h0n-5cz421",
+          "id": "el-mlnhqlo6-cz6jui",
           "role": "textbox",
           "selector": {
             "primary": "[data-testid=\"email-input\"]",
@@ -124,7 +124,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4h0u-3n6nx9",
+          "id": "el-mlnhqloi-daij74",
           "role": "heading",
           "name": "Welcome to Libero Test App",
           "selector": {
@@ -139,7 +139,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4h10-hthcq1",
+          "id": "el-mlnhqlor-cvv9pw",
           "role": "heading",
           "name": "Get Started",
           "selector": {
@@ -154,7 +154,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4h17-je5wb8",
+          "id": "el-mlnhqlp3-i25pnq",
           "role": "heading",
           "name": "🗺️ Auto Mapping",
           "selector": {
@@ -169,7 +169,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4h1e-7qwv8t",
+          "id": "el-mlnhqlpi-45zlsq",
           "role": "heading",
           "name": "🤖 Smart Generation",
           "selector": {
@@ -184,7 +184,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4h1k-klnxqw",
+          "id": "el-mlnhqlpo-luae58",
           "role": "heading",
           "name": "🔄 Self-Healing",
           "selector": {
@@ -199,10 +199,61 @@
           "confidence": 0.8
         }
       ],
-      "forms": [],
+      "forms": [
+        {
+          "id": "form-mlnhqlpq-fsz0ll",
+          "selector": {
+            "primary": "[data-testid=\"signup-form\"]",
+            "fallbacks": [],
+            "stability": 0.6,
+            "type": "data-testid"
+          },
+          "fields": [
+            {
+              "name": "field-input-9e4gec",
+              "type": "email",
+              "selector": {
+                "primary": "[data-testid=\"email-input\"]",
+                "fallbacks": [],
+                "stability": 0.6,
+                "type": "data-testid"
+              },
+              "required": true,
+              "placeholder": "Enter your email",
+              "label": ""
+            }
+          ],
+          "submitButton": {
+            "id": "btn-mlnhqlpq-ncozd6",
+            "role": "button",
+            "name": "Submit",
+            "selector": {
+              "primary": "[data-testid=\"submit-btn\"]",
+              "fallbacks": [],
+              "stability": 0.7,
+              "type": "data-testid"
+            },
+            "type": "button",
+            "attributes": {
+              "type": "submit"
+            },
+            "confidence": 0.9
+          },
+          "validationRules": [
+            {
+              "field": "field-input-9e4gec",
+              "rule": "required"
+            },
+            {
+              "field": "field-input-9e4gec",
+              "rule": "email"
+            }
+          ]
+        }
+      ],
       "metadata": {
-        "firstSeen": "2026-02-15T08:18:43.407Z",
-        "lastSeen": "2026-02-15T08:18:43.407Z",
+        "firstSeen": "2026-02-15T08:35:55.892Z",
+        "lastSeen": "2026-02-15T08:35:55.892Z",
         "visitCount": 1
       }
     },
@@ -214,7 +265,7 @@
       "name": "Welcome to Libero Test App",
       "elements": [
         {
-          "id": "el-mlnh4hlv-usn73y",
+          "id": "el-mlnhqm9w-ui6hk7",
           "role": "button",
           "name": "Get Started →",
           "selector": {
@@ -232,7 +283,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4hm4-xccsag",
+          "id": "el-mlnhqma2-k955e8",
           "role": "link",
           "name": "Home",
           "selector": {
@@ -250,7 +301,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4hm8-bkkwlv",
+          "id": "el-mlnhqma8-ex26nw",
           "role": "link",
           "name": "About",
           "selector": {
@@ -268,7 +319,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4hmd-gx9oqo",
+          "id": "el-mlnhqmad-98mgjv",
           "role": "link",
           "name": "Contact",
           "selector": {
@@ -286,7 +337,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4hmj-4hwq3x",
+          "id": "el-mlnhqmai-v8aoep",
           "role": "link",
           "name": "Dashboard",
           "selector": {
@@ -304,7 +355,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4hmp-dqcv0q",
+          "id": "el-mlnhqmao-5zmcpy",
           "role": "textbox",
           "selector": {
             "primary": "[data-testid=\"email-input\"]",
@@ -325,7 +376,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4hmu-8xaqwh",
+          "id": "el-mlnhqmau-p1s9tj",
           "role": "heading",
           "name": "Welcome to Libero Test App",
           "selector": {
@@ -340,7 +391,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4hn0-80w962",
+          "id": "el-mlnhqmb0-4th5pz",
           "role": "heading",
           "name": "Get Started",
           "selector": {
@@ -355,7 +406,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4hn4-0825zk",
+          "id": "el-mlnhqmb4-wcytcw",
           "role": "heading",
           "name": "🗺️ Auto Mapping",
           "selector": {
@@ -370,7 +421,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4hn8-92vi3g",
+          "id": "el-mlnhqmba-elliep",
           "role": "heading",
           "name": "🤖 Smart Generation",
           "selector": {
@@ -385,7 +436,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4hnc-azdtcs",
+          "id": "el-mlnhqmbe-oxekll",
           "role": "heading",
           "name": "🔄 Self-Healing",
           "selector": {
@@ -400,10 +451,61 @@
           "confidence": 0.8
         }
       ],
-      "forms": [],
+      "forms": [
+        {
+          "id": "form-mlnhqmbg-j2lf8e",
+          "selector": {
+            "primary": "[data-testid=\"signup-form\"]",
+            "fallbacks": [],
+            "stability": 0.6,
+            "type": "data-testid"
+          },
+          "fields": [
+            {
+              "name": "field-input-cg7zaf",
+              "type": "email",
+              "selector": {
+                "primary": "[data-testid=\"email-input\"]",
+                "fallbacks": [],
+                "stability": 0.6,
+                "type": "data-testid"
+              },
+              "required": true,
+              "placeholder": "Enter your email",
+              "label": ""
+            }
+          ],
+          "submitButton": {
+            "id": "btn-mlnhqmbg-s5kosp",
+            "role": "button",
+            "name": "Submit",
+            "selector": {
+              "primary": "[data-testid=\"submit-btn\"]",
+              "fallbacks": [],
+              "stability": 0.7,
+              "type": "data-testid"
+            },
+            "type": "button",
+            "attributes": {
+              "type": "submit"
+            },
+            "confidence": 0.9
+          },
+          "validationRules": [
+            {
+              "field": "field-input-cg7zaf",
+              "rule": "required"
+            },
+            {
+              "field": "field-input-cg7zaf",
+              "rule": "email"
+            }
+          ]
+        }
+      ],
       "metadata": {
-        "firstSeen": "2026-02-15T08:18:44.190Z",
-        "lastSeen": "2026-02-15T08:18:44.190Z",
+        "firstSeen": "2026-02-15T08:35:56.670Z",
+        "lastSeen": "2026-02-15T08:35:56.671Z",
         "visitCount": 1
       }
     },
@@ -415,7 +517,7 @@
       "name": "About Libero Quantum",
       "elements": [
         {
-          "id": "el-mlnh4i8y-lc46jn",
+          "id": "el-mlnhqmuz-7yrogc",
           "role": "link",
           "name": "Home",
           "selector": {
@@ -433,7 +535,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4i96-3exa6n",
+          "id": "el-mlnhqmv6-3p5ohs",
           "role": "link",
           "name": "About",
           "selector": {
@@ -451,7 +553,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4i9c-jd8ps7",
+          "id": "el-mlnhqmv9-bi9i14",
           "role": "link",
           "name": "Contact",
           "selector": {
@@ -469,7 +571,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4i9i-oeg3p5",
+          "id": "el-mlnhqmvd-eweiwi",
           "role": "link",
           "name": "Dashboard",
           "selector": {
@@ -487,7 +589,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4i9q-nx9mne",
+          "id": "el-mlnhqmvj-oigq8o",
           "role": "heading",
           "name": "About Libero Quantum",
           "selector": {
@@ -502,7 +604,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4i9w-hozh71",
+          "id": "el-mlnhqmvn-qx35u5",
           "role": "heading",
           "name": "What is Libero?",
           "selector": {
@@ -517,7 +619,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4ia2-r04f74",
+          "id": "el-mlnhqmvr-0c218l",
           "role": "heading",
           "name": "Key Features:",
           "selector": {
@@ -536,8 +638,8 @@
       ],
       "forms": [],
       "metadata": {
-        "firstSeen": "2026-02-15T08:18:45.006Z",
-        "lastSeen": "2026-02-15T08:18:45.006Z",
+        "firstSeen": "2026-02-15T08:35:57.402Z",
+        "lastSeen": "2026-02-15T08:35:57.402Z",
         "visitCount": 1
       }
     },
@@ -549,7 +651,7 @@
       "name": "Contact Us",
       "elements": [
         {
-          "id": "el-mlnh4itg-lmftan",
+          "id": "el-mlnhqnet-8jdwwz",
           "role": "button",
           "name": "Send Message",
           "selector": {
@@ -567,7 +669,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4ito-rl10pb",
+          "id": "el-mlnhqnf1-dojieq",
           "role": "link",
           "name": "Home",
           "selector": {
@@ -585,7 +687,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4its-1ktx50",
+          "id": "el-mlnhqnf5-h9ap75",
           "role": "link",
           "name": "About",
           "selector": {
@@ -603,7 +705,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4itx-fgo1f9",
+          "id": "el-mlnhqnf9-ljoixr",
           "role": "link",
           "name": "Contact",
           "selector": {
@@ -621,7 +723,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4iu2-zk8x3f",
+          "id": "el-mlnhqnfd-80cl9d",
           "role": "link",
           "name": "Dashboard",
           "selector": {
@@ -639,7 +741,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4iu7-fbsz6q",
+          "id": "el-mlnhqnfk-r44ipf",
           "role": "textbox",
           "selector": {
             "primary": "[data-testid=\"name-input\"]",
@@ -660,7 +762,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4iub-6xj5vh",
+          "id": "el-mlnhqnfo-qxdq87",
           "role": "textbox",
           "selector": {
             "primary": "[data-testid=\"message-textarea\"]",
@@ -680,7 +782,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4iug-ypyy92",
+          "id": "el-mlnhqnfs-ky3s2w",
           "role": "heading",
           "name": "Contact Us",
           "selector": {
@@ -695,10 +797,74 @@
           "confidence": 0.8
         }
       ],
-      "forms": [],
+      "forms": [
+        {
+          "id": "form-mlnhqnfu-1wa6ac",
+          "selector": {
+            "primary": "[data-testid=\"contact-form\"]",
+            "fallbacks": [],
+            "stability": 0.6,
+            "type": "data-testid"
+          },
+          "fields": [
+            {
+              "name": "field-input-xr4wdc",
+              "type": "text",
+              "selector": {
+                "primary": "[data-testid=\"name-input\"]",
+                "fallbacks": [],
+                "stability": 0.6,
+                "type": "data-testid"
+              },
+              "required": true,
+              "placeholder": "Your name",
+              "label": "Name"
+            },
+            {
+              "name": "field-textarea-cw1ajk",
+              "type": "text",
+              "selector": {
+                "primary": "[data-testid=\"message-textarea\"]",
+                "fallbacks": [],
+                "stability": 0.6,
+                "type": "data-testid"
+              },
+              "required": true,
+              "placeholder": "Your message",
+              "label": "Message"
+            }
+          ],
+          "submitButton": {
+            "id": "btn-mlnhqnfu-7cmyr4",
+            "role": "button",
+            "name": "Submit",
+            "selector": {
+              "primary": "[data-testid=\"send-btn\"]",
+              "fallbacks": [],
+              "stability": 0.7,
+              "type": "data-testid"
+            },
+            "type": "button",
+            "attributes": {
+              "type": "submit"
+            },
+            "confidence": 0.9
+          },
+          "validationRules": [
+            {
+              "field": "field-input-xr4wdc",
+              "rule": "required"
+            },
+            {
+              "field": "field-textarea-cw1ajk",
+              "rule": "required"
+            }
+          ]
+        }
+      ],
       "metadata": {
-        "firstSeen": "2026-02-15T08:18:45.739Z",
-        "lastSeen": "2026-02-15T08:18:45.739Z",
+        "firstSeen": "2026-02-15T08:35:58.125Z",
+        "lastSeen": "2026-02-15T08:35:58.125Z",
         "visitCount": 1
       }
     },
@@ -710,7 +876,7 @@
       "name": "Dashboard",
       "elements": [
         {
-          "id": "el-mlnh4jds-hyaiwx",
+          "id": "el-mlnhqnz0-bhvs6v",
           "role": "link",
           "name": "Home",
           "selector": {
@@ -728,7 +894,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4jdz-83w36v",
+          "id": "el-mlnhqnz6-b3pd7z",
           "role": "link",
           "name": "About",
           "selector": {
@@ -746,7 +912,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4je4-n64r1u",
+          "id": "el-mlnhqnza-niv4mo",
           "role": "link",
           "name": "Contact",
           "selector": {
@@ -764,7 +930,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4je8-jc8tc5",
+          "id": "el-mlnhqnzg-fm3jjg",
           "role": "link",
           "name": "Dashboard",
           "selector": {
@@ -782,7 +948,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4jee-xyqja5",
+          "id": "el-mlnhqnzl-5gpzqn",
           "role": "heading",
           "name": "Dashboard",
           "selector": {
@@ -797,7 +963,7 @@
           "confidence": 0.8
         },
         {
-          "id": "el-mlnh4jei-o0toaw",
+          "id": "el-mlnhqnzp-2xexcy",
           "role": "heading",
           "name": "Recent Tests",
           "selector": {
@@ -814,8 +980,8 @@
       ],
       "forms": [],
       "metadata": {
-        "firstSeen": "2026-02-15T08:18:46.460Z",
-        "lastSeen": "2026-02-15T08:18:46.460Z",
+        "firstSeen": "2026-02-15T08:35:58.842Z",
+        "lastSeen": "2026-02-15T08:35:58.842Z",
         "visitCount": 1
       }
     }
@@ -826,7 +992,7 @@
       "to": "8a5edab282632443",
       "type": "navigate",
       "trigger": {
-        "id": "link-mlnh4h1t-71nywp",
+        "id": "link-mlnhqlpy-2xd0k8",
         "role": "link",
         "name": "Home",
         "selector": {
@@ -848,7 +1014,7 @@
       "to": "979bddc4a8caafdd",
       "type": "navigate",
       "trigger": {
-        "id": "link-mlnh4h1t-rpc8x4",
+        "id": "link-mlnhqlpy-tt06l2",
         "role": "link",
         "name": "About",
         "selector": {
@@ -870,7 +1036,7 @@
       "to": "4eb950636535d637",
       "type": "navigate",
       "trigger": {
-        "id": "link-mlnh4h1t-arldwj",
+        "id": "link-mlnhqlpy-w77k2t",
         "role": "link",
         "name": "Contact",
         "selector": {
@@ -892,7 +1058,7 @@
       "to": "89347bb23a645278",
       "type": "navigate",
       "trigger": {
-        "id": "link-mlnh4h1t-akwfbp",
+        "id": "link-mlnhqlpy-ne30m0",
         "role": "link",
         "name": "Dashboard",
         "selector": {
@@ -914,7 +1080,7 @@
       "to": "979bddc4a8caafdd",
       "type": "navigate",
       "trigger": {
-        "id": "link-mlnh4hnj-ptqrko",
+        "id": "link-mlnhqmbj-fc07ul",
         "role": "link",
         "name": "About",
         "selector": {
@@ -936,7 +1102,7 @@
       "to": "4eb950636535d637",
       "type": "navigate",
       "trigger": {
-        "id": "link-mlnh4hnj-at4zcv",
+        "id": "link-mlnhqmbj-8qgk50",
         "role": "link",
         "name": "Contact",
         "selector": {
@@ -958,7 +1124,7 @@
       "to": "89347bb23a645278",
       "type": "navigate",
       "trigger": {
-        "id": "link-mlnh4hnj-1t1uhb",
+        "id": "link-mlnhqmbj-eczwcm",
         "role": "link",
         "name": "Dashboard",
         "selector": {
@@ -980,7 +1146,7 @@
       "to": "4eb950636535d637",
       "type": "navigate",
       "trigger": {
-        "id": "link-mlnh4ia7-747xh8",
+        "id": "link-mlnhqmvv-coe8iu",
         "role": "link",
         "name": "Contact",
         "selector": {
@@ -1002,7 +1168,7 @@
       "to": "89347bb23a645278",
       "type": "navigate",
       "trigger": {
-        "id": "link-mlnh4ia7-jzlokg",
+        "id": "link-mlnhqmvv-eenxuc",
         "role": "link",
         "name": "Dashboard",
         "selector": {
@@ -1024,7 +1190,7 @@
       "to": "89347bb23a645278",
       "type": "navigate",
       "trigger": {
-        "id": "link-mlnh4iuk-wen3mq",
+        "id": "link-mlnhqnfy-t4zec4",
         "role": "link",
         "name": "Dashboard",
         "selector": {
@@ -1044,28 +1210,28 @@
   ],
   "signatures": {
     "8a5edab282632443": {
-      "domHash": "dff076b615c67abd",
-      "timestamp": "2026-02-15T08:18:44.190Z"
+      "domHash": "0ce323eb0ab54184",
+      "timestamp": "2026-02-15T08:35:56.670Z"
     },
     "979bddc4a8caafdd": {
-      "domHash": "cb174bfe7932505c",
-      "timestamp": "2026-02-15T08:18:45.006Z"
+      "domHash": "d38a98b11a82bcbe",
+      "timestamp": "2026-02-15T08:35:57.402Z"
     },
     "4eb950636535d637": {
-      "domHash": "5304b242c8f295aa",
-      "timestamp": "2026-02-15T08:18:45.739Z"
+      "domHash": "09c61b49f682b9dc",
+      "timestamp": "2026-02-15T08:35:58.125Z"
     },
     "89347bb23a645278": {
-      "domHash": "b51ed8c3cc10f593",
-      "timestamp": "2026-02-15T08:18:46.460Z"
+      "domHash": "9e4310c987a5f780",
+      "timestamp": "2026-02-15T08:35:58.842Z"
     }
   },
   "metadata": {
     "totalNodes": 5,
     "totalEdges": 10,
     "totalElements": 43,
-    "totalForms": 0,
-    "crawlDuration": 3944,
+    "totalForms": 3,
+    "crawlDuration": 3945,
     "crawlMethod": "dynamic"
   }
 }
