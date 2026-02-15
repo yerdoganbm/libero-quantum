@@ -1,226 +1,297 @@
-# 🌌 LIBERO QUANTUM v6.0
+# 🌌 Libero Quantum - Autonomous UI Testing Platform
 
-**Autonomous Testing Platform** - Maps, Generates, Executes, and Heals Tests
+**Libero Quantum** is a next-generation autonomous testing platform that maps, generates, executes, learns, and heals UI tests automatically.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue)](https://www.typescriptlang.org/)
+## ✨ Features
+
+- 🗺️ **Deep Application Mapping**: Stateful crawling with auth support
+- 🧪 **Multi-Generator System**: Smoke, Form, Journey, CRUD, A11y tests
+- 🎯 **Coverage-Driven Generation**: Generate tests until coverage targets met
+- 🔄 **Selector Healing**: Auto-repair broken selectors
+- 📊 **Learning & Analytics**: Knowledge base tracks flaky tests and failures
+- 🚀 **Parallel Execution**: Run tests with multiple workers
+- 🎭 **Dual Runners**: Playwright AND Selenium support
+- 📈 **Rich Reporting**: HTML, JSON, JUnit, Coverage, Analytics
 
 ---
 
-## 🚀 QUICKSTART (5 Minutes)
+## 🚀 Quick Start
 
 ### 1. Install
 
 ```bash
-npm install -g libero-quantum
+npm install -g @libero/cli
+# or
+npx @libero/cli init
 ```
 
-### 2. Initialize in your app
+### 2. Initialize
 
 ```bash
 cd your-app
 npx libero init
 ```
 
-Creates `libero.config.json` and `.libero/` directories.
-
-### 3. Map your application
-
-```bash
-npx libero map
-```
-
-Crawls your app and generates AppGraph (`.libero/app-graph/latest.json`).
-
-### 4. Generate test plans
-
-```bash
-npx libero generate
-```
-
-Creates smoke tests (`.libero/test-plans/smoke.json`).
-
-### 5. Run tests
-
-```bash
-npx libero test --mode=full
-```
-
-Executes: map → generate → run → report.
-
-**View report:** `.libero/reports/{runId}/index.html`
-
----
-
-## ✨ WHAT'S NEW IN v6.0
-
-### From Demo → Production Product
-
-**Previous (v1-v5):** Prototype with mock data and demo tests  
-**Now (v6.0):** Real product with:
-
-- ✅ **Monorepo architecture** (packages/cli, agent, generator, runner, reporting, learning)
-- ✅ **Intelligent mapping** (AppGraph with routes, elements, forms)
-- ✅ **Smart test generation** (not placeholders - real scenarios)
-- ✅ **Dual runners** (Playwright + Selenium support)
-- ✅ **Production reporting** (HTML + JSON + JUnit + Allure)
-- ✅ **Self-healing** (selector stability tracking + auto-heal)
-- ✅ **Learning loop** (coverage gaps → adaptive exploration)
-- ✅ **CI/CD ready** (GitHub Actions templates)
-
----
-
-## 📦 FEATURES
-
-### 🗺️ Auto Mapping
-- **Static analysis:** Parses route configs (Next.js, React Router, Vue Router)
-- **Dynamic crawl:** Headless browser mapping
-- **Hybrid:** Combines both for maximum coverage
-- **Output:** AppGraph with nodes (pages/routes) + edges (navigations)
-
-### 🤖 Smart Generation
-- **Smoke tests:** Navigate + visibility assertions
-- **Regression tests:** Critical user flows
-- **Edge-case tests:** Invalid inputs, empty states
-- **Coverage-driven:** Targets routes, elements, assertions
-- **Deterministic:** Random seed for reproducible tests
-
-### 🎯 Dual Execution
-- **Playwright:** Modern, fast, network interception
-- **Selenium:** Enterprise, Grid/Remote support
-- **Unified DSL:** Same tests run on both
-- **Parallelization:** 4x speedup default
-- **Artifacts:** Screenshots, traces, videos, logs
-
-### 📊 Rich Reporting
-- **HTML:** Interactive dashboard with charts
-- **JSON:** Machine-readable for CI
-- **JUnit XML:** Standard CI/CD format
-- **Allure:** Advanced reporting framework (optional)
-- **Failure classification:** Selector/timing/backend/auth
-
-### 🔄 Self-Healing
-- **Selector stability tracking:** Learns which selectors break
-- **Auto-heal mode:** Suggests fixes with confidence score
-- **Coverage gaps:** Detects untested areas → generates new tests
-- **Flaky detection:** Retry → pass = flaky tag
-
----
-
-## 🏗️ ARCHITECTURE
-
-```
-libero-quantum/
-├── packages/
-│   ├── cli/          # Command-line interface
-│   ├── agent/        # App mapping & crawling
-│   ├── generator/    # Test generation
-│   ├── runner/       # Execution (Playwright/Selenium)
-│   ├── reporting/    # Report generation
-│   └── core/         # Shared types & utils
-└── examples/         # Sample apps
-```
-
-**See:** `ARCHITECTURE.md` for detailed design.
-
----
-
-## 📖 USAGE
-
-### CLI Commands
-
-```bash
-# Initialize
-npx libero init [--force]
-
-# Map application
-npx libero map [--depth 3] [--pages 50]
-
-# Generate tests
-npx libero generate [--seed 12345]
-
-# Run tests
-npx libero run [--plan smoke.json] [--headed]
-
-# Full pipeline
-npx libero test --mode=full
-```
-
-### Configuration (`libero.config.json`)
+This creates `libero.config.json`:
 
 ```json
 {
-  "appName": "my-app",
+  "appName": "My App",
   "baseUrl": "http://localhost:3000",
-  "framework": "react",
   "mapping": {
-    "method": "hybrid",
+    "method": "dynamic",
     "maxDepth": 3,
     "maxPages": 50
   },
   "generation": {
-    "categories": ["smoke", "regression"],
     "coverageTargets": {
       "routes": 90,
       "elements": 70,
-      "assertions": 2
+      "forms": 80
     }
   },
   "execution": {
     "runner": "playwright",
-    "browsers": ["chromium"],
-    "headless": true,
     "parallel": true,
     "workers": 4
+  },
+  "learning": {
+    "enabled": true,
+    "autoHeal": true
+  }
+}
+```
+
+### 3. Map Your App
+
+```bash
+# Basic mapping
+npx libero map
+
+# With authentication
+npx libero map --auth=loginForm
+
+# Custom depth/pages
+npx libero map --depth 5 --pages 100
+```
+
+### 4. Generate Tests
+
+```bash
+# Basic generation
+npx libero generate
+
+# All test types
+npx libero generate --type smoke,form,journey,crud,a11y
+
+# Coverage-driven (generates until 90% coverage)
+npx libero generate --coverage 90
+
+# With seed for reproducibility
+npx libero generate --seed 12345
+```
+
+### 5. Run Tests
+
+```bash
+# Basic run
+npx libero run
+
+# Selenium runner
+npx libero run --runner selenium
+
+# Parallel execution
+npx libero run --workers 8
+
+# Headed mode
+npx libero run --headed
+```
+
+### 6. Full Pipeline
+
+```bash
+# Quick mode: smoke + form tests
+npx libero test --quick
+
+# Full mode: all generators + coverage
+npx libero test --full
+```
+
+---
+
+## 📝 Configuration
+
+### Auth Strategies
+
+```json
+{
+  "auth": {
+    "strategy": "loginForm",
+    "loginUrl": "http://localhost:3000/login",
+    "credentials": {
+      "username": "test@example.com",
+      "password": "testpass"
+    }
+  }
+}
+```
+
+Supported strategies:
+- `cookie`: Set cookies before crawl
+- `localStorage`: Set token in localStorage
+- `loginForm`: Auto-login via form
+- `custom`: Custom auth script
+
+### Coverage Targets
+
+```json
+{
+  "generation": {
+    "coverageTargets": {
+      "routes": 90,
+      "elements": 70,
+      "forms": 80,
+      "assertions": 2,
+      "flows": 3
+    }
+  }
+}
+```
+
+### Learning & Healing
+
+```json
+{
+  "learning": {
+    "enabled": true,
+    "kbPath": ".libero/knowledge-base.db",
+    "autoHeal": true,
+    "trackFlaky": true
   }
 }
 ```
 
 ---
 
-## 🎯 MILESTONES
+## 📊 Test Generators
 
-- ✅ **M1:** CLI + Basic Mapping + Smoke Tests + Playwright + Reports
-- ⏳ **M2:** Coverage Metrics + Edge Cases + Robust Selectors
-- ⏳ **M3:** Selenium Adapter + Grid Support + Matrix Execution
-- ⏳ **M4:** Failure Classification + Root Cause + Auto-Heal
-- ⏳ **M5:** Learning KB + Selector Healing + Adaptive Exploration
-- ⏳ **M6:** Web Dashboard + Auto-Fix PR + CI Templates
+### Smoke Tests
+Basic navigation + visibility checks
+
+### Form Tests
+- Positive: valid data submission
+- Negative: empty fields, invalid email
+- Edge: long inputs, special characters
+
+### Journey Tests
+Multi-step user flows (home → product → cart → checkout)
+
+### CRUD Tests
+Create, Read, Update, Delete operations
+
+### A11y Tests
+- Heading structure
+- Form labels
+- Image alt text
+- Interactive element names
 
 ---
 
-## 🧪 EXAMPLE OUTPUT
+## 🔧 Advanced Usage
+
+### Parallel Execution
+
+```bash
+npx libero run --workers 8 --runner playwright
+```
+
+### Selector Healing
+
+When a selector fails, Libero tries alternatives:
+1. `aria-label`
+2. `data-testid`
+3. Text content
+4. XPath fallbacks
+
+Successful repairs are saved to the knowledge base.
+
+### Failure Analytics
+
+After runs, view:
+- Failure clusters by type (timeout, selector, auth, etc.)
+- Flaky test rankings
+- Suggested fixes
+
+```bash
+# Reports generated at:
+.libero/reports/<run-id>/
+  ├── report.html
+  ├── junit.xml
+  ├── coverage.json
+  └── analytics.json
+```
+
+---
+
+## 📦 Monorepo Structure
 
 ```
-🌌 Libero Quantum v6.0
-
-✅ AppGraph: 8 routes, 47 elements, 3 forms
-✅ Generated: 24 smoke tests
-✅ Executed: 22/24 passed (92%)
-✅ Report: .libero/reports/run-abc123/index.html
-
-Coverage:
-  Routes: 100% (8/8)
-  Elements: 73% (34/47)
-  Assertions: 48 total
+packages/
+  ├── agent/       # Crawler + mapping
+  ├── cli/         # CLI commands
+  ├── core/        # Types + utils
+  ├── generator/   # Test generators
+  ├── learning/    # Knowledge base + healing
+  ├── reporting/   # Reporters (HTML, JUnit, etc.)
+  └── runner/      # Playwright + Selenium adapters
 ```
 
 ---
 
-## 🤝 CONTRIBUTING
+## 🧪 CI Integration
 
-See `CONTRIBUTING.md`
+### GitHub Actions
+
+```yaml
+name: Libero Tests
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm install
+      - run: npx libero test --quick
+      - uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: .libero/reports/
+```
+
+### JUnit Integration
+
+```bash
+npx libero run
+# Outputs: .libero/reports/<run-id>/junit.xml
+```
 
 ---
 
-## 📄 LICENSE
+## 🤝 Contributing
 
-MIT License - see `LICENSE`
+PRs welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
 
-**Built with 🧠 by Libero Team**  
-**Powered by Playwright + Selenium + TypeScript**
+## 📄 License
 
-**Star us on GitHub!** ⭐  
-https://github.com/yerdoganbm/libero-quantum
+MIT © Libero Team
+
+---
+
+## 🔗 Links
+
+- [Documentation](https://libero-quantum.dev)
+- [Examples](./examples)
+- [Changelog](./CHANGELOG.md)

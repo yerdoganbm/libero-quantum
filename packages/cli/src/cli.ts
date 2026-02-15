@@ -27,13 +27,14 @@ program
   .description('Map application structure (crawl + analyze)')
   .option('-d, --depth <number>', 'Max crawl depth', '3')
   .option('-p, --pages <number>', 'Max pages to crawl', '50')
-  .action((opts) => mapCommand({ depth: parseInt(opts.depth), pages: parseInt(opts.pages) }));
+  .option('-a, --auth <strategy>', 'Auth strategy: cookie | localStorage | loginForm | custom')
+  .action((opts) => mapCommand({ depth: parseInt(opts.depth), pages: parseInt(opts.pages), auth: opts.auth }));
 
 program
   .command('generate')
   .description('Generate test plans from AppGraph')
   .option('-s, --seed <number>', 'Random seed for deterministic tests')
-  .option('-t, --type <types>', 'Test types: smoke,form,journey (default: smoke,form)')
+  .option('-t, --type <types>', 'Test types: smoke,form,journey,crud,a11y (default: smoke,form)')
   .option('-c, --coverage <0-100>', 'Coverage target percentage; generate until met (uses orchestrator)')
   .action((opts) => generateCommand({
     seed: opts.seed ? parseInt(opts.seed) : undefined,
@@ -47,16 +48,32 @@ program
   .option('-p, --plan <path>', 'Path to test plan')
   .option('--headed', 'Run in headed mode')
   .option('-r, --runner <runner>', 'Test runner: playwright | selenium (default: playwright)')
-  .action((opts) => runCommand({ plan: opts.plan, headless: !opts.headed, runner: opts.runner }));
+  .option('-w, --workers <number>', 'Number of parallel workers (default: 1)')
+  .action((opts) => runCommand({ 
+    plan: opts.plan, 
+    headless: !opts.headed, 
+    runner: opts.runner,
+    workers: opts.workers ? parseInt(opts.workers) : undefined,
+  }));
 
 program
   .command('test')
   .description('Run full pipeline: map + generate + run')
   .option('--mode <mode>', 'Test mode: full | quick', 'full')
   .option('--headed', 'Run in headed mode')
+  .option('--quick', 'Shortcut for quick mode (depth 2, pages 20, smoke+form)')
+  .option('--full', 'Shortcut for full mode (depth 3, pages 50, all tests + coverage)')
   .action(async (opts) => {
-    await mapCommand({ depth: opts.mode === 'quick' ? 2 : 3, pages: opts.mode === 'quick' ? 20 : 50 });
-    await generateCommand({});
+    const mode = opts.quick ? 'quick' : opts.full ? 'full' : opts.mode;
+    
+    if (mode === 'quick') {
+      await mapCommand({ depth: 2, pages: 20 });
+      await generateCommand({ type: 'smoke,form' });
+    } else {
+      await mapCommand({ depth: 3, pages: 50 });
+      await generateCommand({ type: 'smoke,form,journey,crud,a11y', coverage: 80 });
+    }
+    
     await runCommand({ headless: !opts.headed });
   });
 

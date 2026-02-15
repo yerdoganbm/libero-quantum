@@ -75,6 +75,36 @@ export async function generateCommand(options: {
       }
     }
 
+    if (types.includes('crud')) {
+      const { CRUDGenerator } = await import('@libero/generator');
+      const crudGen = new CRUDGenerator();
+      const crudTests = crudGen.generate(graph);
+      if (crudTests.length > 0) {
+        suites.push({
+          id: generateId('suite'),
+          name: 'CRUD Tests',
+          category: 'regression',
+          tests: crudTests,
+          tags: ['crud'],
+        });
+      }
+    }
+
+    if (types.includes('a11y')) {
+      const { A11yGenerator } = await import('@libero/generator');
+      const a11yGen = new A11yGenerator();
+      const a11yTests = a11yGen.generate(graph);
+      if (a11yTests.length > 0) {
+        suites.push({
+          id: generateId('suite'),
+          name: 'Accessibility Tests',
+          category: 'a11y',
+          tests: a11yTests,
+          tags: ['a11y', 'accessibility'],
+        });
+      }
+    }
+
     plan = {
       version: '6.0.0',
       appName: graph.appName,

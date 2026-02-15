@@ -7,7 +7,7 @@ import { logger, readJson, writeJson } from '@libero/core';
 import { PlaywrightCrawler, AppGraphBuilder } from '@libero/agent';
 import * as path from 'path';
 
-export async function mapCommand(options: { depth?: number; pages?: number }): Promise<void> {
+export async function mapCommand(options: { depth?: number; pages?: number; auth?: string }): Promise<void> {
   logger.info('Starting application mapping...');
 
   // Load config
@@ -22,6 +22,20 @@ export async function mapCommand(options: { depth?: number; pages?: number }): P
   
   const startTime = Date.now();
 
+  // Determine auth strategy
+  let authStrategy: { name: string; config: any } | undefined;
+  if (options.auth) {
+    // CLI override: e.g. --auth=cookie or --auth=loginForm
+    const strategyName = options.auth;
+    authStrategy = { name: strategyName, config: config.auth || {} };
+  } else if (config.auth && config.auth.strategy !== 'none') {
+    // Use config auth
+    authStrategy = {
+      name: config.auth.strategy,
+      config: config.auth,
+    };
+  }
+
   // Crawl
   const { nodes, edges } = await crawler.crawl({
     baseUrl: config.baseUrl,
@@ -30,6 +44,7 @@ export async function mapCommand(options: { depth?: number; pages?: number }): P
     timeout: mappingConfig.timeout,
     headless: true,
     captureScreenshots: mappingConfig.captureScreenshots,
+    authStrategy,
   });
 
   const duration = Date.now() - startTime;

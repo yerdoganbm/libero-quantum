@@ -5,6 +5,7 @@
 import { chromium, type Browser, type Page } from 'playwright';
 import { AppNode, AppEdge, ElementDescriptor } from '@libero/core';
 import { logger, hashString, generateId } from '@libero/core';
+import { getAuthStrategy } from '../auth/auth-strategies';
 
 export interface CrawlOptions {
   baseUrl: string;
@@ -13,6 +14,7 @@ export interface CrawlOptions {
   timeout: number;
   headless: boolean;
   captureScreenshots: boolean;
+  authStrategy?: { name: string; config: any };
 }
 
 export class PlaywrightCrawler {
@@ -26,13 +28,28 @@ export class PlaywrightCrawler {
     logger.info(`Starting crawl: ${options.baseUrl}`);
     
     this.browser = await chromium.launch({ headless: options.headless });
+    const context = await this.browser.newContext();
+
+    // Setup auth if provided
+    if (options.authStrategy) {
+      const strategy = getAuthStrategy(options.authStrategy.name);
+      if (strategy) {
+        const authPage = await context.newPage();
+        await strategy.setup(authPage, options.authStrategy.config);
+        await authPage.close();
+        logger.success(`Auth strategy '${options.authStrategy.name}' applied`);
+      } else {
+        logger.warn(`Unknown auth strategy: ${options.authStrategy.name}`);
+      }
+    }
+
     this.queue.push({ url: options.baseUrl, depth: 0 });
 
     while (this.queue.length > 0 && this.nodes.length < options.maxPages) {
       const item = this.queue.shift()!;
       if (this.visited.has(item.url) || item.depth > options.maxDepth) continue;
       
-      await this.crawlPage(item.url, item.depth, options);
+      await this.crawlPage(item.url, item.depth, options, context);
     }
 
     await this.browser.close();
@@ -41,11 +58,11 @@ export class PlaywrightCrawler {
     return { nodes: this.nodes, edges: this.edges };
   }
 
-  private async crawlPage(url: string, depth: number, options: CrawlOptions): Promise<void> {
+  private async crawlPage(url: string, depth: number, options: CrawlOptions, context: any): Promise<void> {
     this.visited.add(url);
     logger.debug(`Crawling: ${url} (depth: ${depth})`);
 
-    const page = await this.browser!.newPage();
+    const page = await context.newPage();
     
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: options.timeout });

@@ -4,12 +4,12 @@
 
 import { TestPlan, LiberoConfig, AppGraph } from '@libero/core';
 import { logger, readJson, writeJson } from '@libero/core';
-import { PlaywrightAdapter, SeleniumAdapter } from '@libero/runner';
+import { PlaywrightAdapter, SeleniumAdapter, ParallelRunner } from '@libero/runner';
 import { HtmlReporter, JsonReporter, JUnitReporter, CoverageReporter, AnalyticsReporter } from '@libero/reporting';
 import { KnowledgeBase, clusterFailures } from '@libero/learning';
 import * as path from 'path';
 
-export async function runCommand(options: { plan?: string; headless?: boolean; runner?: string }): Promise<void> {
+export async function runCommand(options: { plan?: string; headless?: boolean; runner?: string; workers?: number }): Promise<void> {
   logger.info('Executing tests...');
 
   // Load config
@@ -32,12 +32,46 @@ export async function runCommand(options: { plan?: string; headless?: boolean; r
 
   // Execute
   const runner = options.runner || config.execution.runner;
+  const workers = options.workers || config.execution.workers || 1;
+  const useParallel = config.execution.parallel && workers > 1;
   const artifactsBaseDir = path.join(process.cwd(), '.libero', 'artifacts');
   const tempRunId = Date.now().toString();
   const kbPath = path.join(process.cwd(), config.learning?.kbPath || '.libero/knowledge-base.db');
   
   let result;
-  if (runner === 'selenium') {
+
+  if (useParallel) {
+    logger.info(`Running in parallel mode with ${workers} workers`);
+    const parallelRunner = new ParallelRunner();
+    
+    const adapterOptions = runner === 'selenium' ? {
+      headless: options.headless ?? config.execution.headless,
+      baseUrl: config.baseUrl,
+      timeout: config.execution.timeout,
+      retries: config.execution.retries,
+      screenshotOnFail: config.execution.screenshotOnFail,
+      artifactsDir: path.join(artifactsBaseDir, tempRunId),
+      browser: 'chrome' as const,
+      knowledgeBasePath: config.learning?.enabled ? kbPath : undefined,
+      enableHealing: config.learning?.autoHeal ?? false,
+    } : {
+      headless: options.headless ?? config.execution.headless,
+      baseUrl: config.baseUrl,
+      timeout: config.execution.timeout,
+      retries: config.execution.retries,
+      screenshotOnFail: config.execution.screenshotOnFail,
+      traceOnFail: config.execution.traceOnFail,
+      artifactsDir: path.join(artifactsBaseDir, tempRunId),
+      knowledgeBasePath: config.learning?.enabled ? kbPath : undefined,
+      enableHealing: config.learning?.autoHeal ?? false,
+    };
+
+    result = await parallelRunner.execute(plan, {
+      workers,
+      runner: runner as 'playwright' | 'selenium',
+      adapterOptions: adapterOptions as any,
+    });
+  } else if (runner === 'selenium') {
     const adapter = new SeleniumAdapter();
     result = await adapter.execute(plan, {
       headless: options.headless ?? config.execution.headless,
