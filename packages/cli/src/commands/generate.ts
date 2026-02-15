@@ -2,20 +2,9 @@
  * libero generate - Generate test plans
  */
 
-import {
-  AIMode,
-  AppGraph,
-  LiberoConfig,
-  TestSuite,
-  applyAIMode,
-  generateId,
-  logger,
-  migrateAppGraph,
-  readJson,
-  resolveAIMode,
-  writeJson,
-} from '@libero/core';
-import { FormGenerator, SmokeGenerator, runOrchestrator } from '@libero/generator';
+import { AppGraph, TestSuite, LiberoConfig, logger, readJson, writeJson, generateId, migrateAppGraph } from '@libero/core';
+import { SmokeGenerator, FormGenerator, runOrchestrator } from '@libero/generator';
+
 import * as path from 'path';
 
 const ORCHESTRATOR_TYPES = new Set(['smoke', 'form', 'journey'] as const);
@@ -30,38 +19,25 @@ export async function generateCommand(options: {
 
   const graphPath = path.join(process.cwd(), '.libero', 'app-graph', 'latest.json');
   const rawGraph = readJson<AppGraph>(graphPath);
+
   if (!rawGraph) {
     logger.error('AppGraph not found. Run: npx libero map');
     process.exit(1);
   }
 
   const graph = migrateAppGraph(rawGraph);
+
   const seed = options.seed ?? Date.now();
 
   const configPath = path.join(process.cwd(), 'libero.config.json');
   const config = readJson<LiberoConfig>(configPath);
-  const aiMode = resolveAIMode(options.aiMode, config);
-  const effectiveConfig = config ? applyAIMode(config, aiMode) : null;
-  if (aiMode !== 'off') logger.info(`AI mode active: ${aiMode}`);
 
-  const types = options.type
-    ? options.type.split(',').map((t) => t.trim())
-    : aiMode === 'autopilot'
-      ? ['smoke', 'form', 'journey', 'crud', 'a11y']
-      : aiMode === 'assist'
-        ? ['smoke', 'form', 'journey']
-        : ['smoke', 'form'];
-
-  const requestedCoverage =
-    options.coverage ?? (aiMode === 'autopilot' ? 85 : aiMode === 'assist' ? 75 : undefined);
 
   let plan: { version: string; appName: string; timestamp: string; suites: TestSuite[]; config: any };
 
-  if (requestedCoverage != null && requestedCoverage > 0) {
-    const pct = requestedCoverage > 1 ? Math.min(100, requestedCoverage) : Math.round(requestedCoverage * 100);
-    const scenarioTypes = types.filter(
-      (type): type is 'smoke' | 'form' | 'journey' => ORCHESTRATOR_TYPES.has(type as any)
-    );
+  if (options.coverage != null && options.coverage > 0) {
+    const pct = options.coverage > 1 ? Math.min(100, options.coverage) : Math.round(options.coverage * 100);
+
 
     plan = runOrchestrator(graph, effectiveConfig, {
       seed,
@@ -78,8 +54,10 @@ export async function generateCommand(options: {
     }
 
     if (types.includes('form')) {
-      const formVariantConfig = effectiveConfig?.generation?.formVariants;
-      const formTests = new FormGenerator().generate(graph, {
+      const formGen = new FormGenerator();
+      const formVariantConfig = config?.generation?.formVariants;
+      const formTests = formGen.generate(graph, {
+
         seed,
         includeBoundaryCases: formVariantConfig?.enabled ? formVariantConfig.includeBoundaryCases : false,
         includeInvalidCases: formVariantConfig?.enabled ? formVariantConfig.includeInvalidCases : true,

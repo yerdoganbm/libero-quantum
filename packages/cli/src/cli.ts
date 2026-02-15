@@ -29,16 +29,8 @@ program
   .option('-p, --pages <number>', 'Max pages to crawl', '50')
   .option('-a, --auth <strategy>', 'Auth strategy: cookie | localStorage | loginForm | custom')
   .option('--deep-forms', 'Enable deep form extraction (constraints + validation hints)')
-  .option('--ai-mode <mode>', 'AI mode: off | assist | autopilot')
-  .action((opts) =>
-    mapCommand({
-      depth: parseInt(opts.depth, 10),
-      pages: parseInt(opts.pages, 10),
-      auth: opts.auth,
-      deepForms: Boolean(opts.deepForms),
-      aiMode: opts.aiMode,
-    })
-  );
+  .action((opts) => mapCommand({ depth: parseInt(opts.depth), pages: parseInt(opts.pages), auth: opts.auth, deepForms: Boolean(opts.deepForms) }));
+
 
 program
   .command('generate')
@@ -65,16 +57,15 @@ program
   .option('-w, --workers <number>', 'Number of parallel workers (default: 1)')
   .option('-b, --browser <name>', 'Browser for selenium: chrome|firefox|edge')
   .option('--grid-url <url>', 'Selenium Grid remote URL')
-  .action((opts) =>
-    runCommand({
-      plan: opts.plan,
-      headless: !opts.headed,
-      runner: opts.runner,
-      workers: opts.workers ? parseInt(opts.workers, 10) : undefined,
-      browser: opts.browser,
-      gridUrl: opts.gridUrl,
-    })
-  );
+
+  .action((opts) => runCommand({ 
+    plan: opts.plan, 
+    headless: !opts.headed, 
+    runner: opts.runner,
+    workers: opts.workers ? parseInt(opts.workers) : undefined,
+    browser: opts.browser,
+    gridUrl: opts.gridUrl,
+  }));
 
 program
   .command('test')

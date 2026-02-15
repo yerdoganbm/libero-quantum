@@ -83,9 +83,6 @@ npx libero map --depth 5 --pages 100
 # Deep form extraction (constraints + validation hints)
 npx libero map --deep-forms
 
-# AI-assisted crawl profile
-npx libero map --ai-mode assist
-```
 
 ### 4. Generate Tests
 
