@@ -28,7 +28,8 @@ program
   .option('-d, --depth <number>', 'Max crawl depth', '3')
   .option('-p, --pages <number>', 'Max pages to crawl', '50')
   .option('-a, --auth <strategy>', 'Auth strategy: cookie | localStorage | loginForm | custom')
-  .action((opts) => mapCommand({ depth: parseInt(opts.depth), pages: parseInt(opts.pages), auth: opts.auth }));
+  .option('--deep-forms', 'Enable deep form extraction (constraints + validation hints)')
+  .action((opts) => mapCommand({ depth: parseInt(opts.depth), pages: parseInt(opts.pages), auth: opts.auth, deepForms: Boolean(opts.deepForms) }));
 
 program
   .command('generate')
@@ -49,11 +50,15 @@ program
   .option('--headed', 'Run in headed mode')
   .option('-r, --runner <runner>', 'Test runner: playwright | selenium (default: playwright)')
   .option('-w, --workers <number>', 'Number of parallel workers (default: 1)')
+  .option('-b, --browser <name>', 'Browser for selenium: chrome|firefox|edge')
+  .option('--grid-url <url>', 'Selenium Grid remote URL')
   .action((opts) => runCommand({ 
     plan: opts.plan, 
     headless: !opts.headed, 
     runner: opts.runner,
     workers: opts.workers ? parseInt(opts.workers) : undefined,
+    browser: opts.browser,
+    gridUrl: opts.gridUrl,
   }));
 
 program

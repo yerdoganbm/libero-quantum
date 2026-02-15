@@ -2,7 +2,7 @@
  * libero generate - Generate test plans
  */
 
-import { AppGraph, TestSuite, LiberoConfig, logger, readJson, writeJson, generateId } from '@libero/core';
+import { AppGraph, TestSuite, LiberoConfig, logger, readJson, writeJson, generateId, migrateAppGraph } from '@libero/core';
 import { SmokeGenerator, FormGenerator, runOrchestrator } from '@libero/generator';
 import * as path from 'path';
 
@@ -14,22 +14,25 @@ export async function generateCommand(options: {
   logger.info('Generating test plans...');
 
   const graphPath = path.join(process.cwd(), '.libero', 'app-graph', 'latest.json');
-  const graph = readJson<AppGraph>(graphPath);
+  const rawGraph = readJson<AppGraph>(graphPath);
 
-  if (!graph) {
+  if (!rawGraph) {
     logger.error('AppGraph not found. Run: npx libero map');
     process.exit(1);
   }
 
+  const graph = migrateAppGraph(rawGraph);
+
   const types = options.type ? options.type.split(',').map((t) => t.trim()) : ['smoke', 'form'];
   const seed = options.seed ?? Date.now();
+
+  const configPath = path.join(process.cwd(), 'libero.config.json');
+  const config = readJson<LiberoConfig>(configPath);
 
   let plan: { version: string; appName: string; timestamp: string; suites: TestSuite[]; config: any };
 
   if (options.coverage != null && options.coverage > 0) {
     const pct = options.coverage > 1 ? Math.min(100, options.coverage) : Math.round(options.coverage * 100);
-    const configPath = path.join(process.cwd(), 'libero.config.json');
-    const config = readJson<LiberoConfig>(configPath);
 
     plan = runOrchestrator(graph, config ?? null, {
       seed,
@@ -48,7 +51,12 @@ export async function generateCommand(options: {
 
     if (types.includes('form')) {
       const formGen = new FormGenerator();
-      const formTests = formGen.generate(graph);
+      const formVariantConfig = config?.generation?.formVariants;
+      const formTests = formGen.generate(graph, {
+        seed,
+        includeBoundaryCases: formVariantConfig?.enabled ? formVariantConfig.includeBoundaryCases : false,
+        includeInvalidCases: formVariantConfig?.enabled ? formVariantConfig.includeInvalidCases : true,
+      });
       if (formTests.length > 0) {
         suites.push({
           id: generateId('suite'),
