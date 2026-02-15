@@ -41,7 +41,9 @@ export interface MappingConfig {
   timeout: number;
   followExternalLinks: boolean;
   captureScreenshots: boolean;
+  deepFormExtraction?: boolean;
 }
+
 
 export interface GenerationConfig {
   categories: Array<'smoke' | 'regression' | 'edge' | 'exploratory' | 'visual' | 'a11y'>;
@@ -55,7 +57,13 @@ export interface GenerationConfig {
   edgeCases: boolean;
   visualRegression: boolean;
   accessibility: boolean;
+  formVariants?: {
+    enabled: boolean;
+    includeBoundaryCases: boolean;
+    includeInvalidCases: boolean;
+  };
 }
+
 
 export interface ExecutionConfig {
   runner: 'playwright' | 'selenium' | 'both';
@@ -117,6 +125,7 @@ export const DEFAULT_CONFIG: Partial<LiberoConfig> = {
     timeout: 30000,
     followExternalLinks: false,
     captureScreenshots: true,
+    deepFormExtraction: false,
   },
   generation: {
     categories: ['smoke', 'regression'],
@@ -130,6 +139,11 @@ export const DEFAULT_CONFIG: Partial<LiberoConfig> = {
     edgeCases: true,
     visualRegression: false,
     accessibility: false,
+    formVariants: {
+      enabled: false,
+      includeBoundaryCases: true,
+      includeInvalidCases: true,
+    },
   },
   execution: {
     runner: 'playwright',

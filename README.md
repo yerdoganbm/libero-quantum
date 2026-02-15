@@ -41,13 +41,19 @@ This creates `libero.config.json`:
   "mapping": {
     "method": "dynamic",
     "maxDepth": 3,
-    "maxPages": 50
+    "maxPages": 50,
+    "deepFormExtraction": false
   },
   "generation": {
     "coverageTargets": {
       "routes": 90,
       "elements": 70,
       "forms": 80
+    },
+    "formVariants": {
+      "enabled": false,
+      "includeBoundaryCases": true,
+      "includeInvalidCases": true
     }
   },
   "execution": {
@@ -73,6 +79,9 @@ npx libero map --auth=loginForm
 
 # Custom depth/pages
 npx libero map --depth 5 --pages 100
+
+# Deep form extraction (constraints + validation hints)
+npx libero map --deep-forms
 ```
 
 ### 4. Generate Tests
