@@ -106,8 +106,11 @@ npx libero generate --seed 12345
 # Basic run
 npx libero run
 
-# Selenium runner
-npx libero run --runner selenium
+# Selenium runner (local)
+npx libero run --runner selenium --browser chrome
+
+# Selenium Grid / RemoteWebDriver
+npx libero run --runner selenium --grid-url http://localhost:4444/wd/hub --browser chrome
 
 # Parallel execution
 npx libero run --workers 8

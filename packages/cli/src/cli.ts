@@ -50,11 +50,15 @@ program
   .option('--headed', 'Run in headed mode')
   .option('-r, --runner <runner>', 'Test runner: playwright | selenium (default: playwright)')
   .option('-w, --workers <number>', 'Number of parallel workers (default: 1)')
+  .option('-b, --browser <name>', 'Browser for selenium: chrome|firefox|edge')
+  .option('--grid-url <url>', 'Selenium Grid remote URL')
   .action((opts) => runCommand({ 
     plan: opts.plan, 
     headless: !opts.headed, 
     runner: opts.runner,
     workers: opts.workers ? parseInt(opts.workers) : undefined,
+    browser: opts.browser,
+    gridUrl: opts.gridUrl,
   }));
 
 program

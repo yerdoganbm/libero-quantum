@@ -9,7 +9,7 @@ import { HtmlReporter, JsonReporter, JUnitReporter, CoverageReporter, AnalyticsR
 import { KnowledgeBase, clusterFailures } from '@libero/learning';
 import * as path from 'path';
 
-export async function runCommand(options: { plan?: string; headless?: boolean; runner?: string; workers?: number }): Promise<void> {
+export async function runCommand(options: { plan?: string; headless?: boolean; runner?: string; workers?: number; browser?: string; gridUrl?: string }): Promise<void> {
   logger.info('Executing tests...');
 
   // Load config
@@ -51,7 +51,9 @@ export async function runCommand(options: { plan?: string; headless?: boolean; r
       retries: config.execution.retries,
       screenshotOnFail: config.execution.screenshotOnFail,
       artifactsDir: path.join(artifactsBaseDir, tempRunId),
-      browser: 'chrome' as const,
+      browser: (options.browser || config.execution.selenium?.capabilities?.browserName || 'chrome') as 'chrome' | 'firefox' | 'edge',
+      gridUrl: options.gridUrl || config.execution.selenium?.gridUrl,
+      capabilities: config.execution.selenium?.capabilities,
       knowledgeBasePath: config.learning?.enabled ? kbPath : undefined,
       enableHealing: config.learning?.autoHeal ?? false,
     } : {
@@ -80,7 +82,9 @@ export async function runCommand(options: { plan?: string; headless?: boolean; r
       retries: config.execution.retries,
       screenshotOnFail: config.execution.screenshotOnFail,
       artifactsDir: path.join(artifactsBaseDir, tempRunId),
-      browser: 'chrome',
+      browser: (options.browser || config.execution.selenium?.capabilities?.browserName || 'chrome') as 'chrome' | 'firefox' | 'edge',
+      gridUrl: options.gridUrl || config.execution.selenium?.gridUrl,
+      capabilities: config.execution.selenium?.capabilities,
       knowledgeBasePath: config.learning?.enabled ? kbPath : undefined,
       enableHealing: config.learning?.autoHeal ?? false,
     });

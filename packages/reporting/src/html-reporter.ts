@@ -3,6 +3,7 @@
  */
 
 import { RunResult } from '@libero/core';
+import { classifyError } from '@libero/learning';
 import { writeFile, logger, ensureDir } from '@libero/core';
 import * as path from 'path';
 
@@ -25,6 +26,20 @@ export class HtmlReporter {
     const passRate = result.summary.passRate;
     
     const statusColor = passRate >= 80 ? '#10b981' : passRate >= 50 ? '#f59e0b' : '#ef4444';
+
+    const rcaBuckets = new Map<string, number>();
+    for (const suite of result.suites) {
+      for (const test of suite.tests) {
+        if (!test.error?.message) continue;
+        const category = test.classification?.category || classifyError(test.error.message);
+        rcaBuckets.set(category, (rcaBuckets.get(category) || 0) + 1);
+      }
+    }
+
+    const rcaHtml = Array.from(rcaBuckets.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([category, count]) => `<span class="stat">🧠 ${category}: ${count}</span>`)
+      .join('');
 
     const testsHtml = result.suites.map(suite => `
       <div class="suite">
@@ -58,6 +73,7 @@ export class HtmlReporter {
                     <div class="error">
                       <strong>Error:</strong> ${test.error.message}
                       ${test.error.screenshot ? `<br><img src="${test.error.screenshot}" style="max-width: 400px; margin-top: 10px;" />` : ''}
+                      ${test.artifacts?.length ? `<br><strong>Artifacts:</strong> ${test.artifacts.map((a) => `<a href="${a}">${a.split('/').pop()}</a>`).join(', ')}` : ''}
                     </div>
                   </td>
                 </tr>
@@ -104,6 +120,7 @@ export class HtmlReporter {
     .badge.skip { background: #6b7280; color: #fff; }
     .error-row { background: #ef444410; }
     .error { padding: 1rem; background: #0f172a; border-radius: 6px; font-size: 0.875rem; color: #fca5a5; font-family: 'Courier New', monospace; }
+    .error a { color: #93c5fd; }
     .footer { text-align: center; margin-top: 3rem; color: #64748b; font-size: 0.875rem; }
   </style>
 </head>
@@ -135,6 +152,8 @@ export class HtmlReporter {
       </div>
     </div>
   </div>
+
+  ${rcaHtml ? `<div class="suite"><h2>🧩 RCA Categories</h2><div class="suite-stats">${rcaHtml}</div></div>` : ''}
 
   ${testsHtml}
 
