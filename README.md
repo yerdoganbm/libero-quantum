@@ -41,13 +41,19 @@ This creates `libero.config.json`:
   "mapping": {
     "method": "dynamic",
     "maxDepth": 3,
-    "maxPages": 50
+    "maxPages": 50,
+    "deepFormExtraction": false
   },
   "generation": {
     "coverageTargets": {
       "routes": 90,
       "elements": 70,
       "forms": 80
+    },
+    "formVariants": {
+      "enabled": false,
+      "includeBoundaryCases": true,
+      "includeInvalidCases": true
     }
   },
   "execution": {
@@ -73,6 +79,12 @@ npx libero map --auth=loginForm
 
 # Custom depth/pages
 npx libero map --depth 5 --pages 100
+
+# Deep form extraction (constraints + validation hints)
+npx libero map --deep-forms
+
+# AI-assisted crawl profile
+npx libero map --ai-mode assist
 ```
 
 ### 4. Generate Tests
@@ -89,6 +101,9 @@ npx libero generate --coverage 90
 
 # With seed for reproducibility
 npx libero generate --seed 12345
+
+# AI autopilot generation profile
+npx libero generate --ai-mode autopilot
 ```
 
 ### 5. Run Tests
@@ -97,8 +112,11 @@ npx libero generate --seed 12345
 # Basic run
 npx libero run
 
-# Selenium runner
-npx libero run --runner selenium
+# Selenium runner (local)
+npx libero run --runner selenium --browser chrome
+
+# Selenium Grid / RemoteWebDriver
+npx libero run --runner selenium --grid-url http://localhost:4444/wd/hub --browser chrome
 
 # Parallel execution
 npx libero run --workers 8
@@ -115,11 +133,31 @@ npx libero test --quick
 
 # Full mode: all generators + coverage
 npx libero test --full
+
+# Full pipeline with AI assist presets
+npx libero test --full --ai-mode assist
 ```
 
 ---
 
 ## 📝 Configuration
+
+### AI Mode Presets
+
+```json
+{
+  "ai": {
+    "mode": "off"
+  }
+}
+```
+
+Modes:
+- `off`: keep explicit/manual config behavior only.
+- `assist`: enables deep forms + invalid form variants + healing/adaptive learning defaults.
+- `autopilot`: everything in `assist` plus stronger coverage targets and minimum parallelism.
+
+CLI overrides config via `--ai-mode off|assist|autopilot` for `map`, `generate`, and `test`.
 
 ### Auth Strategies
 

@@ -2,7 +2,7 @@
  * AppGraph builder
  */
 
-import { AppGraph, AppNode, AppEdge, GraphMetadata, ElementDescriptor } from '@libero/core';
+import { AppGraph, AppNode, AppEdge, GraphMetadata, ElementDescriptor, getCurrentGraphVersion } from '@libero/core';
 import { hashObject } from '@libero/core';
 
 export class AppGraphBuilder {
@@ -33,7 +33,7 @@ export class AppGraphBuilder {
     };
 
     return {
-      version: '6.0.0',
+      version: getCurrentGraphVersion(),
       appName,
       baseUrl,
       timestamp: new Date().toISOString(),

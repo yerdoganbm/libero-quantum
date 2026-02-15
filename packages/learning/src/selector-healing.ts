@@ -58,6 +58,21 @@ export function generateAlternativeSelectors(element: ElementDescriptor): string
   return Array.from(new Set(alternatives));
 }
 
+
+
+export function rankAlternativeSelectors(selectors: string[]): string[] {
+  const score = (selector: string): number => {
+    if (selector.includes('data-testid')) return 100;
+    if (selector.startsWith('#')) return 90;
+    if (selector.includes('aria-label')) return 80;
+    if (selector.includes('[role=')) return 70;
+    if (selector.includes(':has-text')) return 60;
+    return 40;
+  };
+
+  return [...selectors].sort((a, b) => score(b) - score(a) || a.localeCompare(b));
+}
+
 export async function attemptSelectorHealing(
   element: ElementDescriptor,
   kb: KnowledgeBase,
@@ -67,9 +82,9 @@ export async function attemptSelectorHealing(
   const signatureId = element.id;
   const sig = await kb.getSignature(signatureId);
 
-  const alternatives = sig
-    ? JSON.parse(sig.alternativeSelectors)
-    : generateAlternativeSelectors(element);
+  const alternatives = rankAlternativeSelectors(
+    sig ? JSON.parse(sig.alternativeSelectors) : generateAlternativeSelectors(element)
+  );
 
   let attempts = 0;
   for (const sel of alternatives) {

@@ -232,7 +232,7 @@ npm install express typescript mongodb axios @types/express @types/node ts-node
 # Connection string example:
 export MONGO_URI="mongodb://localhost:27017"
 # or
-export MONGO_URI="mongodb+srv://user:pass@cluster.mongodb.net"
+export MONGO_URI="mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<db>?retryWrites=true&w=majority"
 ```
 
 ### Start the Organism:
