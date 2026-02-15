@@ -1,0 +1,8 @@
+# Libero artifacts
+*.png
+*.mp4
+*.webm
+*.zip
+knowledge-base.db
+reports/
+artifacts/

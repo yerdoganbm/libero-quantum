@@ -1,96 +1,36 @@
 {
   "name": "libero-quantum",
-  "version": "5.0.0",
-  "description": "🌌 The World's First Quantum Testing System - Test your apps in parallel universes",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "bin": {
-    "libero-init": "scripts/libero-init.js",
-    "libero-genesis": "scripts/run-genesis.js"
-  },
-  "keywords": [
-    "testing",
-    "qa",
-    "automation",
-    "quantum",
-    "ai",
-    "gpt-4",
-    "playwright",
-    "appium",
-    "blockchain",
-    "web3",
-    "machine-learning",
-    "self-healing",
-    "predictive",
-    "omniscient"
+  "version": "6.0.0",
+  "private": true,
+  "description": "🌌 Autonomous Testing Platform - Maps, generates, executes, heals tests",
+  "workspaces": [
+    "packages/*"
   ],
-  "author": "AI Architect <ynserdgnbm@gmail.com>",
-  "license": "MIT",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"packages/**/*.{ts,tsx,js,json,md}\"",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "cli": "node packages/cli/dist/cli.js"
+  },
+  "devDependencies": {
+    "turbo": "^1.13.0",
+    "typescript": "^5.8.2",
+    "prettier": "^3.3.0",
+    "@types/node": "^22.19.11",
+    "eslint": "^9.0.0",
+    "ts-node": "^10.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/yerdoganbm/libero-quantum.git"
   },
-  "bugs": {
-    "url": "https://github.com/yerdoganbm/libero-quantum/issues"
-  },
-  "homepage": "https://libero-quantum.dev",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "scripts": {
-    "test": "playwright test",
-    "test:v4": "playwright test libero-v4-core.spec.ts --headed",
-    "test:v5": "playwright test libero-v5-quantum.spec.ts --headed",
-    "test:omniscient": "playwright test libero-v4-core.spec.ts -g 'SINGULARITY' --headed",
-    "test:quantum": "playwright test libero-v5-quantum.spec.ts -g 'Quantum Leap' --headed",
-    "test:neural": "playwright test libero-v5-quantum.spec.ts -g 'Neural' --headed",
-    "test:temporal": "playwright test libero-v5-quantum.spec.ts -g 'Temporal' --headed",
-    "test:consciousness": "playwright test libero-v5-quantum.spec.ts -g 'Consciousness' --headed",
-    "libero:security": "playwright test libero-v4-core.spec.ts -g 'Guardian' --reporter=json > security-report.json",
-    "libero:predict": "playwright test libero-v4-core.spec.ts -g 'Oracle' --reporter=json > predictive-report.json",
-    "neuro:start": "ts-node libero-neuro-core.ts",
-    "neuro:dev": "nodemon --exec ts-node libero-neuro-core.ts",
-    "neuro:server": "ts-node server/neuro-core-server.ts",
-    "neuro:full": "ts-node server/neuro-core-full.ts",
-    "neuro:full:dev": "nodemon --exec ts-node server/neuro-core-full.ts",
-    "neuro:universal": "ts-node server/neuro-core-universal.ts",
-    "neuro:build": "tsc libero-neuro-core.ts --outDir dist",
-    "neuro:prod": "node dist/libero-neuro-core.js",
-    "libero:init": "node scripts/libero-init.js",
-    "libero:upgrade": "npm install libero-quantum@latest",
-    "docs:serve": "npx docsify serve docs",
-    "build": "tsc",
-    "lint": "eslint . --ext .ts",
-    "format": "prettier --write \"**/*.{ts,js,json,md}\"",
-    "prepare": "husky install",
-    "genesis": "ts-node libero-universal.ts",
-    "libero:genesis": "ts-node libero-universal.ts"
-  },
-  "dependencies": {
-    "@faker-js/faker": "^10.3.0",
-    "js-yaml": "^4.1.0",
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "mongodb": "^6.3.0",
-    "axios": "^1.6.0",
-    "playwright": "^1.40.0"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.58.2",
-    "@types/node": "^22.19.11",
-    "@types/js-yaml": "^4.0.5",
-    "@types/express": "^4.17.21",
-    "typescript": "~5.8.2",
-    "eslint": "^9.0.0",
-    "prettier": "^3.0.0",
-    "husky": "^9.0.0",
-    "ts-node": "^10.9.2"
-  },
-  "peerDependencies": {
-    "playwright": "^1.40.0"
-  },
-  "optionalDependencies": {
-    "appium": "^2.0.0",
-    "ethers": "^6.0.0"
-  }
+  "author": "Libero Team <ynserdgnbm@gmail.com>",
+  "license": "MIT"
 }

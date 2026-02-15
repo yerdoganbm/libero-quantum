@@ -33,6 +33,21 @@ interface TestResult {
   passed: boolean;
   duration: number;
   error?: string;
+  aiGenerated?: boolean;
+}
+
+interface PageContext {
+  buttonLabels: string[];
+  linkLabels: string[];
+  linkHrefs: string[];
+  inputPlaceholders: string[];
+  headingTexts: string[];
+}
+
+interface GeneratedScenario {
+  name: string;
+  type: 'click_button' | 'click_link' | 'fill_input' | 'heading_visible';
+  target: string;
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -168,6 +183,88 @@ async function runHumanCentricTests(page: Page, chaosMode: boolean): Promise<Tes
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// 2b. AI SENARYO ÜRETİCİ (Sayfaya göre kendi kendine senaryo üretir)
+// ═══════════════════════════════════════════════════════════════════════
+
+async function getPageContext(page: Page): Promise<PageContext> {
+  const ctx = await page.evaluate(() => {
+    const buttons = Array.from(document.querySelectorAll('button, [role="button"], input[type="submit"], input[type="button"]'));
+    const buttonLabels = buttons.map((b) => (b.getAttribute('aria-label') || (b as HTMLElement).innerText || (b as HTMLInputElement).value || '').trim().slice(0, 50));
+    const links = Array.from(document.querySelectorAll('a[href]'));
+    const linkLabels = links.map((a) => (a.textContent || '').trim().slice(0, 50));
+    const linkHrefs = links.map((a) => (a.getAttribute('href') || '').slice(0, 100));
+    const inputs = Array.from(document.querySelectorAll('input[placeholder], textarea[placeholder]'));
+    const inputPlaceholders = inputs.map((i) => (i.getAttribute('placeholder') || '').trim().slice(0, 50));
+    const headings = Array.from(document.querySelectorAll('h1, h2, h3, [role="heading"]'));
+    const headingTexts = headings.map((h) => (h.textContent || '').trim().slice(0, 60));
+    return { buttonLabels, linkLabels, linkHrefs, inputPlaceholders, headingTexts };
+  }).catch(() => ({ buttonLabels: [], linkLabels: [], linkHrefs: [], inputPlaceholders: [], headingTexts: [] }));
+  return ctx as PageContext;
+}
+
+function generateScenariosFromContext(ctx: PageContext): GeneratedScenario[] {
+  const scenarios: GeneratedScenario[] = [];
+  const seenButtons = new Set<string>();
+  for (const label of ctx.buttonLabels) {
+    const key = label || '(etiket yok)';
+    if (seenButtons.has(key)) continue;
+    seenButtons.add(key);
+    scenarios.push({ name: `"${key || 'Buton'}" butonuna tıkla`, type: 'click_button', target: label || 'button' });
+  }
+  const seenLinks = new Set<string>();
+  for (let i = 0; i < Math.min(ctx.linkLabels.length, 5); i++) {
+    const label = ctx.linkLabels[i] || ctx.linkHrefs[i] || `Link ${i + 1}`;
+    if (seenLinks.has(label)) continue;
+    seenLinks.add(label);
+    scenarios.push({ name: `"${label}" linkine tıkla`, type: 'click_link', target: label });
+  }
+  for (const ph of ctx.inputPlaceholders.slice(0, 3)) {
+    if (!ph) continue;
+    scenarios.push({ name: `"${ph}" alanına yaz ve formu gönder`, type: 'fill_input', target: ph });
+  }
+  for (const heading of ctx.headingTexts.slice(0, 2)) {
+    if (!heading) continue;
+    scenarios.push({ name: `"${heading}" başlığı görünür olmalı`, type: 'heading_visible', target: heading });
+  }
+  return scenarios;
+}
+
+async function runGeneratedScenarios(page: Page, scenarios: GeneratedScenario[]): Promise<TestResult[]> {
+  const results: TestResult[] = [];
+  const start = () => Date.now();
+  for (const scenario of scenarios.slice(0, 15)) {
+    const t0 = start();
+    try {
+      if (scenario.type === 'click_button') {
+        const btn = scenario.target && scenario.target !== 'button' ? page.getByRole('button', { name: scenario.target }) : page.getByRole('button').first();
+        await btn.waitFor({ state: 'visible', timeout: 2000 });
+        await btn.click();
+        results.push({ name: `[AI] ${scenario.name}`, passed: true, duration: Date.now() - t0, aiGenerated: true });
+        await delay(400);
+      } else if (scenario.type === 'click_link') {
+        const link = page.getByRole('link', { name: scenario.target }).first();
+        await link.waitFor({ state: 'visible', timeout: 2000 });
+        await link.click();
+        results.push({ name: `[AI] ${scenario.name}`, passed: true, duration: Date.now() - t0, aiGenerated: true });
+        await delay(400);
+      } else if (scenario.type === 'fill_input') {
+        const input = page.getByPlaceholder(scenario.target).first();
+        await input.waitFor({ state: 'visible', timeout: 2000 });
+        await input.fill('test@test.com');
+        results.push({ name: `[AI] ${scenario.name}`, passed: true, duration: Date.now() - t0, aiGenerated: true });
+      } else if (scenario.type === 'heading_visible') {
+        const heading = page.getByRole('heading', { name: scenario.target }).first();
+        await heading.waitFor({ state: 'visible', timeout: 2000 });
+        results.push({ name: `[AI] ${scenario.name}`, passed: true, duration: Date.now() - t0, aiGenerated: true });
+      }
+    } catch (e) {
+      results.push({ name: `[AI] ${scenario.name}`, passed: false, duration: Date.now() - t0, error: String(e).slice(0, 80), aiGenerated: true });
+    }
+  }
+  return results;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 // 3. THE CLI WIZARD
 // ═══════════════════════════════════════════════════════════════════════
 
@@ -211,7 +308,14 @@ function reportTable(scan: ScanResult[], tests: TestResult[], tech: Tech) {
   }
   print('└────────────────────────────────────────────┴──────────┴────────┘');
   const passed = tests.filter((t) => t.passed).length;
-  print(`\n  Sonuç: ${passed}/${tests.length} test başarılı.\n`);
+  const baseCount = tests.filter((t) => !t.aiGenerated).length;
+  const aiCount = tests.filter((t) => t.aiGenerated).length;
+  const aiPassed = tests.filter((t) => t.aiGenerated && t.passed).length;
+  if (aiCount > 0) {
+    print(`\n  Sonuç: ${passed}/${tests.length} test başarılı (Temel: ${baseCount}, AI üretilen: ${aiPassed}/${aiCount}).\n`);
+  } else {
+    print(`\n  Sonuç: ${passed}/${tests.length} test başarılı.\n`);
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -221,12 +325,20 @@ function reportTable(scan: ScanResult[], tests: TestResult[], tech: Tech) {
 async function main() {
   print('\n  🤖 Libero: Merhaba! Evrensel Otonom Test (GENESIS v2.0)\n');
 
-  const urlAnswer = await ask('  🤖 Hangi URL\'i test edeyim? (örn. http://localhost:3000): ');
-  let url = urlAnswer || 'http://localhost:3000';
-  if (!url.startsWith('http')) url = 'http://' + url;
-
-  const chaosAnswer = await ask('  🤖 Kaos Modu açılsın mı? (E/H) [H]: ');
-  const chaosMode = /^e|y|t|1$/i.test((chaosAnswer || 'H').trim());
+  let url: string;
+  let chaosMode: boolean;
+  if (process.env.GENESIS_URL) {
+    url = process.env.GENESIS_URL;
+    if (!url.startsWith('http')) url = 'http://' + url;
+    chaosMode = /^e|y|t|1$/i.test((process.env.GENESIS_CHAOS || 'H').trim());
+    print(`  📌 URL (env): ${url} | Kaos: ${chaosMode ? 'Evet' : 'Hayır'}\n`);
+  } else {
+    const urlAnswer = await ask('  🤖 Hangi URL\'i test edeyim? (örn. http://localhost:3000): ');
+    url = urlAnswer || 'http://localhost:3000';
+    if (!url.startsWith('http')) url = 'http://' + url;
+    const chaosAnswer = await ask('  🤖 Kaos Modu açılsın mı? (E/H) [H]: ');
+    chaosMode = /^e|y|t|1$/i.test((chaosAnswer || 'H').trim());
+  }
 
   print('\n  ⏳ Sayfa açılıyor...\n');
 
@@ -243,7 +355,14 @@ async function main() {
     await waitForStability(page, strategy);
 
     const scan = await scanUniversalElements(page);
-    const tests = await runHumanCentricTests(page, chaosMode);
+    const baseTests = await runHumanCentricTests(page, chaosMode);
+
+    print('  🧠 AI senaryo üretiliyor (sayfaya göre)...\n');
+    const ctx = await getPageContext(page);
+    const scenarios = generateScenariosFromContext(ctx);
+    print(`  📋 ${scenarios.length} senaryo üretildi.\n`);
+    const aiTests = await runGeneratedScenarios(page, scenarios);
+    const tests = [...baseTests, ...aiTests];
 
     reportTable(scan, tests, tech);
   } catch (e) {

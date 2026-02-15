@@ -1,0 +1,1071 @@
+{
+  "version": "6.0.0",
+  "appName": "react-vite",
+  "baseUrl": "http://localhost:5174",
+  "timestamp": "2026-02-15T08:18:46.564Z",
+  "framework": "react",
+  "nodes": [
+    {
+      "id": "8a5edab282632443",
+      "type": "route",
+      "url": "http://localhost:5174",
+      "route": "/",
+      "name": "Welcome to Libero Test App",
+      "elements": [
+        {
+          "id": "el-mlnh4gzm-mfkjjc",
+          "role": "button",
+          "name": "Get Started →",
+          "selector": {
+            "primary": "[data-testid=\"submit-btn\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "button",
+          "attributes": {
+            "type": "submit",
+            "data-testid": "submit-btn"
+          },
+          "text": "Get Started →",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4gzx-okhqer",
+          "role": "link",
+          "name": "Home",
+          "selector": {
+            "primary": "[data-testid=\"nav-home\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-home",
+            "href": "/"
+          },
+          "text": "Home",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4h03-kw0vdu",
+          "role": "link",
+          "name": "About",
+          "selector": {
+            "primary": "[data-testid=\"nav-about\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-about",
+            "href": "/about"
+          },
+          "text": "About",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4h0a-5sq241",
+          "role": "link",
+          "name": "Contact",
+          "selector": {
+            "primary": "[data-testid=\"nav-contact\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-contact",
+            "href": "/contact"
+          },
+          "text": "Contact",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4h0g-wyy09b",
+          "role": "link",
+          "name": "Dashboard",
+          "selector": {
+            "primary": "[data-testid=\"nav-dashboard\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-dashboard",
+            "href": "/dashboard"
+          },
+          "text": "Dashboard",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4h0n-5cz421",
+          "role": "textbox",
+          "selector": {
+            "primary": "[data-testid=\"email-input\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "textbox",
+          "attributes": {
+            "type": "email",
+            "placeholder": "Enter your email",
+            "data-testid": "email-input",
+            "required": "",
+            "value": ""
+          },
+          "text": "",
+          "placeholder": "Enter your email",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4h0u-3n6nx9",
+          "role": "heading",
+          "name": "Welcome to Libero Test App",
+          "selector": {
+            "primary": "h1:has-text(\"Welcome to Libero Test App\"), h2:has-text(\"Welcome to Libero Test App\"), h3:has-text(\"Welcome to Libero Test App\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "Welcome to Libero Test App",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4h10-hthcq1",
+          "role": "heading",
+          "name": "Get Started",
+          "selector": {
+            "primary": "h1:has-text(\"Get Started\"), h2:has-text(\"Get Started\"), h3:has-text(\"Get Started\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "Get Started",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4h17-je5wb8",
+          "role": "heading",
+          "name": "🗺️ Auto Mapping",
+          "selector": {
+            "primary": "h1:has-text(\"🗺️ Auto Mapping\"), h2:has-text(\"🗺️ Auto Mapping\"), h3:has-text(\"🗺️ Auto Mapping\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "🗺️ Auto Mapping",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4h1e-7qwv8t",
+          "role": "heading",
+          "name": "🤖 Smart Generation",
+          "selector": {
+            "primary": "h1:has-text(\"🤖 Smart Generation\"), h2:has-text(\"🤖 Smart Generation\"), h3:has-text(\"🤖 Smart Generation\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "🤖 Smart Generation",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4h1k-klnxqw",
+          "role": "heading",
+          "name": "🔄 Self-Healing",
+          "selector": {
+            "primary": "h1:has-text(\"🔄 Self-Healing\"), h2:has-text(\"🔄 Self-Healing\"), h3:has-text(\"🔄 Self-Healing\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "🔄 Self-Healing",
+          "confidence": 0.8
+        }
+      ],
+      "forms": [],
+      "metadata": {
+        "firstSeen": "2026-02-15T08:18:43.407Z",
+        "lastSeen": "2026-02-15T08:18:43.407Z",
+        "visitCount": 1
+      }
+    },
+    {
+      "id": "8a5edab282632443",
+      "type": "route",
+      "url": "http://localhost:5174/",
+      "route": "/",
+      "name": "Welcome to Libero Test App",
+      "elements": [
+        {
+          "id": "el-mlnh4hlv-usn73y",
+          "role": "button",
+          "name": "Get Started →",
+          "selector": {
+            "primary": "[data-testid=\"submit-btn\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "button",
+          "attributes": {
+            "type": "submit",
+            "data-testid": "submit-btn"
+          },
+          "text": "Get Started →",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4hm4-xccsag",
+          "role": "link",
+          "name": "Home",
+          "selector": {
+            "primary": "[data-testid=\"nav-home\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-home",
+            "href": "/"
+          },
+          "text": "Home",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4hm8-bkkwlv",
+          "role": "link",
+          "name": "About",
+          "selector": {
+            "primary": "[data-testid=\"nav-about\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-about",
+            "href": "/about"
+          },
+          "text": "About",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4hmd-gx9oqo",
+          "role": "link",
+          "name": "Contact",
+          "selector": {
+            "primary": "[data-testid=\"nav-contact\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-contact",
+            "href": "/contact"
+          },
+          "text": "Contact",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4hmj-4hwq3x",
+          "role": "link",
+          "name": "Dashboard",
+          "selector": {
+            "primary": "[data-testid=\"nav-dashboard\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-dashboard",
+            "href": "/dashboard"
+          },
+          "text": "Dashboard",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4hmp-dqcv0q",
+          "role": "textbox",
+          "selector": {
+            "primary": "[data-testid=\"email-input\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "textbox",
+          "attributes": {
+            "type": "email",
+            "placeholder": "Enter your email",
+            "data-testid": "email-input",
+            "required": "",
+            "value": ""
+          },
+          "text": "",
+          "placeholder": "Enter your email",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4hmu-8xaqwh",
+          "role": "heading",
+          "name": "Welcome to Libero Test App",
+          "selector": {
+            "primary": "h1:has-text(\"Welcome to Libero Test App\"), h2:has-text(\"Welcome to Libero Test App\"), h3:has-text(\"Welcome to Libero Test App\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "Welcome to Libero Test App",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4hn0-80w962",
+          "role": "heading",
+          "name": "Get Started",
+          "selector": {
+            "primary": "h1:has-text(\"Get Started\"), h2:has-text(\"Get Started\"), h3:has-text(\"Get Started\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "Get Started",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4hn4-0825zk",
+          "role": "heading",
+          "name": "🗺️ Auto Mapping",
+          "selector": {
+            "primary": "h1:has-text(\"🗺️ Auto Mapping\"), h2:has-text(\"🗺️ Auto Mapping\"), h3:has-text(\"🗺️ Auto Mapping\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "🗺️ Auto Mapping",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4hn8-92vi3g",
+          "role": "heading",
+          "name": "🤖 Smart Generation",
+          "selector": {
+            "primary": "h1:has-text(\"🤖 Smart Generation\"), h2:has-text(\"🤖 Smart Generation\"), h3:has-text(\"🤖 Smart Generation\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "🤖 Smart Generation",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4hnc-azdtcs",
+          "role": "heading",
+          "name": "🔄 Self-Healing",
+          "selector": {
+            "primary": "h1:has-text(\"🔄 Self-Healing\"), h2:has-text(\"🔄 Self-Healing\"), h3:has-text(\"🔄 Self-Healing\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "🔄 Self-Healing",
+          "confidence": 0.8
+        }
+      ],
+      "forms": [],
+      "metadata": {
+        "firstSeen": "2026-02-15T08:18:44.190Z",
+        "lastSeen": "2026-02-15T08:18:44.190Z",
+        "visitCount": 1
+      }
+    },
+    {
+      "id": "979bddc4a8caafdd",
+      "type": "route",
+      "url": "http://localhost:5174/about",
+      "route": "/about",
+      "name": "About Libero Quantum",
+      "elements": [
+        {
+          "id": "el-mlnh4i8y-lc46jn",
+          "role": "link",
+          "name": "Home",
+          "selector": {
+            "primary": "[data-testid=\"nav-home\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-home",
+            "href": "/"
+          },
+          "text": "Home",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4i96-3exa6n",
+          "role": "link",
+          "name": "About",
+          "selector": {
+            "primary": "[data-testid=\"nav-about\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-about",
+            "href": "/about"
+          },
+          "text": "About",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4i9c-jd8ps7",
+          "role": "link",
+          "name": "Contact",
+          "selector": {
+            "primary": "[data-testid=\"nav-contact\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-contact",
+            "href": "/contact"
+          },
+          "text": "Contact",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4i9i-oeg3p5",
+          "role": "link",
+          "name": "Dashboard",
+          "selector": {
+            "primary": "[data-testid=\"nav-dashboard\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-dashboard",
+            "href": "/dashboard"
+          },
+          "text": "Dashboard",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4i9q-nx9mne",
+          "role": "heading",
+          "name": "About Libero Quantum",
+          "selector": {
+            "primary": "h1:has-text(\"About Libero Quantum\"), h2:has-text(\"About Libero Quantum\"), h3:has-text(\"About Libero Quantum\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "About Libero Quantum",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4i9w-hozh71",
+          "role": "heading",
+          "name": "What is Libero?",
+          "selector": {
+            "primary": "h1:has-text(\"What is Libero?\"), h2:has-text(\"What is Libero?\"), h3:has-text(\"What is Libero?\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "What is Libero?",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4ia2-r04f74",
+          "role": "heading",
+          "name": "Key Features:",
+          "selector": {
+            "primary": "h1:has-text(\"Key Features:\"), h2:has-text(\"Key Features:\"), h3:has-text(\"Key Features:\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {
+            "style": "margin-top: 1.5rem;"
+          },
+          "text": "Key Features:",
+          "confidence": 0.8
+        }
+      ],
+      "forms": [],
+      "metadata": {
+        "firstSeen": "2026-02-15T08:18:45.006Z",
+        "lastSeen": "2026-02-15T08:18:45.006Z",
+        "visitCount": 1
+      }
+    },
+    {
+      "id": "4eb950636535d637",
+      "type": "route",
+      "url": "http://localhost:5174/contact",
+      "route": "/contact",
+      "name": "Contact Us",
+      "elements": [
+        {
+          "id": "el-mlnh4itg-lmftan",
+          "role": "button",
+          "name": "Send Message",
+          "selector": {
+            "primary": "[data-testid=\"send-btn\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "button",
+          "attributes": {
+            "type": "submit",
+            "data-testid": "send-btn"
+          },
+          "text": "Send Message",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4ito-rl10pb",
+          "role": "link",
+          "name": "Home",
+          "selector": {
+            "primary": "[data-testid=\"nav-home\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-home",
+            "href": "/"
+          },
+          "text": "Home",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4its-1ktx50",
+          "role": "link",
+          "name": "About",
+          "selector": {
+            "primary": "[data-testid=\"nav-about\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-about",
+            "href": "/about"
+          },
+          "text": "About",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4itx-fgo1f9",
+          "role": "link",
+          "name": "Contact",
+          "selector": {
+            "primary": "[data-testid=\"nav-contact\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-contact",
+            "href": "/contact"
+          },
+          "text": "Contact",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4iu2-zk8x3f",
+          "role": "link",
+          "name": "Dashboard",
+          "selector": {
+            "primary": "[data-testid=\"nav-dashboard\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-dashboard",
+            "href": "/dashboard"
+          },
+          "text": "Dashboard",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4iu7-fbsz6q",
+          "role": "textbox",
+          "selector": {
+            "primary": "[data-testid=\"name-input\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "textbox",
+          "attributes": {
+            "type": "text",
+            "placeholder": "Your name",
+            "data-testid": "name-input",
+            "required": "",
+            "value": ""
+          },
+          "text": "",
+          "placeholder": "Your name",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4iub-6xj5vh",
+          "role": "textbox",
+          "selector": {
+            "primary": "[data-testid=\"message-textarea\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "textbox",
+          "attributes": {
+            "placeholder": "Your message",
+            "data-testid": "message-textarea",
+            "rows": "5",
+            "required": ""
+          },
+          "text": "",
+          "placeholder": "Your message",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4iug-ypyy92",
+          "role": "heading",
+          "name": "Contact Us",
+          "selector": {
+            "primary": "h1:has-text(\"Contact Us\"), h2:has-text(\"Contact Us\"), h3:has-text(\"Contact Us\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "Contact Us",
+          "confidence": 0.8
+        }
+      ],
+      "forms": [],
+      "metadata": {
+        "firstSeen": "2026-02-15T08:18:45.739Z",
+        "lastSeen": "2026-02-15T08:18:45.739Z",
+        "visitCount": 1
+      }
+    },
+    {
+      "id": "89347bb23a645278",
+      "type": "route",
+      "url": "http://localhost:5174/dashboard",
+      "route": "/dashboard",
+      "name": "Dashboard",
+      "elements": [
+        {
+          "id": "el-mlnh4jds-hyaiwx",
+          "role": "link",
+          "name": "Home",
+          "selector": {
+            "primary": "[data-testid=\"nav-home\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-home",
+            "href": "/"
+          },
+          "text": "Home",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4jdz-83w36v",
+          "role": "link",
+          "name": "About",
+          "selector": {
+            "primary": "[data-testid=\"nav-about\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-about",
+            "href": "/about"
+          },
+          "text": "About",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4je4-n64r1u",
+          "role": "link",
+          "name": "Contact",
+          "selector": {
+            "primary": "[data-testid=\"nav-contact\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-contact",
+            "href": "/contact"
+          },
+          "text": "Contact",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4je8-jc8tc5",
+          "role": "link",
+          "name": "Dashboard",
+          "selector": {
+            "primary": "[data-testid=\"nav-dashboard\"]",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "data-testid"
+          },
+          "type": "link",
+          "attributes": {
+            "data-testid": "nav-dashboard",
+            "href": "/dashboard"
+          },
+          "text": "Dashboard",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4jee-xyqja5",
+          "role": "heading",
+          "name": "Dashboard",
+          "selector": {
+            "primary": "h1:has-text(\"Dashboard\"), h2:has-text(\"Dashboard\"), h3:has-text(\"Dashboard\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "Dashboard",
+          "confidence": 0.8
+        },
+        {
+          "id": "el-mlnh4jei-o0toaw",
+          "role": "heading",
+          "name": "Recent Tests",
+          "selector": {
+            "primary": "h1:has-text(\"Recent Tests\"), h2:has-text(\"Recent Tests\"), h3:has-text(\"Recent Tests\")",
+            "fallbacks": [],
+            "stability": 0.5,
+            "type": "css"
+          },
+          "type": "heading",
+          "attributes": {},
+          "text": "Recent Tests",
+          "confidence": 0.8
+        }
+      ],
+      "forms": [],
+      "metadata": {
+        "firstSeen": "2026-02-15T08:18:46.460Z",
+        "lastSeen": "2026-02-15T08:18:46.460Z",
+        "visitCount": 1
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "8a5edab282632443",
+      "to": "8a5edab282632443",
+      "type": "navigate",
+      "trigger": {
+        "id": "link-mlnh4h1t-71nywp",
+        "role": "link",
+        "name": "Home",
+        "selector": {
+          "primary": "[data-testid=\"nav-home\"]",
+          "fallbacks": [],
+          "stability": 0.5,
+          "type": "data-testid"
+        },
+        "type": "link",
+        "attributes": {
+          "href": "/"
+        },
+        "text": "Home",
+        "confidence": 0.7
+      }
+    },
+    {
+      "from": "8a5edab282632443",
+      "to": "979bddc4a8caafdd",
+      "type": "navigate",
+      "trigger": {
+        "id": "link-mlnh4h1t-rpc8x4",
+        "role": "link",
+        "name": "About",
+        "selector": {
+          "primary": "[data-testid=\"nav-about\"]",
+          "fallbacks": [],
+          "stability": 0.5,
+          "type": "data-testid"
+        },
+        "type": "link",
+        "attributes": {
+          "href": "/about"
+        },
+        "text": "About",
+        "confidence": 0.7
+      }
+    },
+    {
+      "from": "8a5edab282632443",
+      "to": "4eb950636535d637",
+      "type": "navigate",
+      "trigger": {
+        "id": "link-mlnh4h1t-arldwj",
+        "role": "link",
+        "name": "Contact",
+        "selector": {
+          "primary": "[data-testid=\"nav-contact\"]",
+          "fallbacks": [],
+          "stability": 0.5,
+          "type": "data-testid"
+        },
+        "type": "link",
+        "attributes": {
+          "href": "/contact"
+        },
+        "text": "Contact",
+        "confidence": 0.7
+      }
+    },
+    {
+      "from": "8a5edab282632443",
+      "to": "89347bb23a645278",
+      "type": "navigate",
+      "trigger": {
+        "id": "link-mlnh4h1t-akwfbp",
+        "role": "link",
+        "name": "Dashboard",
+        "selector": {
+          "primary": "[data-testid=\"nav-dashboard\"]",
+          "fallbacks": [],
+          "stability": 0.5,
+          "type": "data-testid"
+        },
+        "type": "link",
+        "attributes": {
+          "href": "/dashboard"
+        },
+        "text": "Dashboard",
+        "confidence": 0.7
+      }
+    },
+    {
+      "from": "8a5edab282632443",
+      "to": "979bddc4a8caafdd",
+      "type": "navigate",
+      "trigger": {
+        "id": "link-mlnh4hnj-ptqrko",
+        "role": "link",
+        "name": "About",
+        "selector": {
+          "primary": "[data-testid=\"nav-about\"]",
+          "fallbacks": [],
+          "stability": 0.5,
+          "type": "data-testid"
+        },
+        "type": "link",
+        "attributes": {
+          "href": "/about"
+        },
+        "text": "About",
+        "confidence": 0.7
+      }
+    },
+    {
+      "from": "8a5edab282632443",
+      "to": "4eb950636535d637",
+      "type": "navigate",
+      "trigger": {
+        "id": "link-mlnh4hnj-at4zcv",
+        "role": "link",
+        "name": "Contact",
+        "selector": {
+          "primary": "[data-testid=\"nav-contact\"]",
+          "fallbacks": [],
+          "stability": 0.5,
+          "type": "data-testid"
+        },
+        "type": "link",
+        "attributes": {
+          "href": "/contact"
+        },
+        "text": "Contact",
+        "confidence": 0.7
+      }
+    },
+    {
+      "from": "8a5edab282632443",
+      "to": "89347bb23a645278",
+      "type": "navigate",
+      "trigger": {
+        "id": "link-mlnh4hnj-1t1uhb",
+        "role": "link",
+        "name": "Dashboard",
+        "selector": {
+          "primary": "[data-testid=\"nav-dashboard\"]",
+          "fallbacks": [],
+          "stability": 0.5,
+          "type": "data-testid"
+        },
+        "type": "link",
+        "attributes": {
+          "href": "/dashboard"
+        },
+        "text": "Dashboard",
+        "confidence": 0.7
+      }
+    },
+    {
+      "from": "979bddc4a8caafdd",
+      "to": "4eb950636535d637",
+      "type": "navigate",
+      "trigger": {
+        "id": "link-mlnh4ia7-747xh8",
+        "role": "link",
+        "name": "Contact",
+        "selector": {
+          "primary": "[data-testid=\"nav-contact\"]",
+          "fallbacks": [],
+          "stability": 0.5,
+          "type": "data-testid"
+        },
+        "type": "link",
+        "attributes": {
+          "href": "/contact"
+        },
+        "text": "Contact",
+        "confidence": 0.7
+      }
+    },
+    {
+      "from": "979bddc4a8caafdd",
+      "to": "89347bb23a645278",
+      "type": "navigate",
+      "trigger": {
+        "id": "link-mlnh4ia7-jzlokg",
+        "role": "link",
+        "name": "Dashboard",
+        "selector": {
+          "primary": "[data-testid=\"nav-dashboard\"]",
+          "fallbacks": [],
+          "stability": 0.5,
+          "type": "data-testid"
+        },
+        "type": "link",
+        "attributes": {
+          "href": "/dashboard"
+        },
+        "text": "Dashboard",
+        "confidence": 0.7
+      }
+    },
+    {
+      "from": "4eb950636535d637",
+      "to": "89347bb23a645278",
+      "type": "navigate",
+      "trigger": {
+        "id": "link-mlnh4iuk-wen3mq",
+        "role": "link",
+        "name": "Dashboard",
+        "selector": {
+          "primary": "[data-testid=\"nav-dashboard\"]",
+          "fallbacks": [],
+          "stability": 0.5,
+          "type": "data-testid"
+        },
+        "type": "link",
+        "attributes": {
+          "href": "/dashboard"
+        },
+        "text": "Dashboard",
+        "confidence": 0.7
+      }
+    }
+  ],
+  "signatures": {
+    "8a5edab282632443": {
+      "domHash": "dff076b615c67abd",
+      "timestamp": "2026-02-15T08:18:44.190Z"
+    },
+    "979bddc4a8caafdd": {
+      "domHash": "cb174bfe7932505c",
+      "timestamp": "2026-02-15T08:18:45.006Z"
+    },
+    "4eb950636535d637": {
+      "domHash": "5304b242c8f295aa",
+      "timestamp": "2026-02-15T08:18:45.739Z"
+    },
+    "89347bb23a645278": {
+      "domHash": "b51ed8c3cc10f593",
+      "timestamp": "2026-02-15T08:18:46.460Z"
+    }
+  },
+  "metadata": {
+    "totalNodes": 5,
+    "totalEdges": 10,
+    "totalElements": 43,
+    "totalForms": 0,
+    "crawlDuration": 3944,
+    "crawlMethod": "dynamic"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@libero/cli",
+  "version": "6.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "libero": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@libero/agent": "*",
+    "@libero/core": "*",
+    "@libero/generator": "*",
+    "@libero/reporting": "*",
+    "@libero/runner": "*",
+    "chalk": "^5.6.2",
+    "commander": "^11.1.0",
+    "inquirer": "^9.3.8",
+    "ora": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.0",
+    "@types/node": "^22.19.11",
+    "typescript": "^5.8.2"
+  }
+}

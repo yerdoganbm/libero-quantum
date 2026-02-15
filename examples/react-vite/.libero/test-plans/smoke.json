@@ -1,0 +1,525 @@
+{
+  "version": "6.0.0",
+  "appName": "react-vite",
+  "timestamp": "2026-02-15T08:19:20.387Z",
+  "suites": [
+    {
+      "id": "suite-mlnh59kz-l13p8h",
+      "name": "Smoke Tests",
+      "category": "smoke",
+      "tests": [
+        {
+          "id": "test-mlnh59ky-yzwumr",
+          "name": "[Smoke] Welcome to Libero Test App - Page loads and heading visible",
+          "description": "Navigate to Welcome to Libero Test App and verify basic content",
+          "flow": [
+            {
+              "id": "step-mlnh59ky-xgpv2n",
+              "action": "navigate",
+              "target": "http://localhost:5174",
+              "description": "Navigate to Welcome to Libero Test App"
+            },
+            {
+              "id": "step-mlnh59ky-zfy826",
+              "action": "wait",
+              "options": {
+                "timeout": 2000,
+                "waitFor": "networkidle"
+              },
+              "description": "Wait for page stability"
+            }
+          ],
+          "assertions": [
+            {
+              "type": "visible",
+              "target": {
+                "id": "el-mlnh4h0u-3n6nx9",
+                "role": "heading",
+                "name": "Welcome to Libero Test App",
+                "selector": {
+                  "primary": "h1:has-text(\"Welcome to Libero Test App\"), h2:has-text(\"Welcome to Libero Test App\"), h3:has-text(\"Welcome to Libero Test App\")",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "css"
+                },
+                "type": "heading",
+                "attributes": {},
+                "text": "Welcome to Libero Test App",
+                "confidence": 0.8
+              },
+              "description": "Heading \"Welcome to Libero Test App\" should be visible"
+            },
+            {
+              "type": "url",
+              "target": "/",
+              "expected": "/",
+              "operator": "contains",
+              "description": "URL should contain route"
+            }
+          ],
+          "tags": [
+            "smoke",
+            "navigation",
+            "/"
+          ],
+          "priority": "critical",
+          "estimatedDuration": 3000
+        },
+        {
+          "id": "test-mlnh59ky-tnzexh",
+          "name": "[Smoke] Welcome to Libero Test App - Page loads and heading visible",
+          "description": "Navigate to Welcome to Libero Test App and verify basic content",
+          "flow": [
+            {
+              "id": "step-mlnh59ky-k88168",
+              "action": "navigate",
+              "target": "http://localhost:5174/",
+              "description": "Navigate to Welcome to Libero Test App"
+            },
+            {
+              "id": "step-mlnh59ky-h1e00o",
+              "action": "wait",
+              "options": {
+                "timeout": 2000,
+                "waitFor": "networkidle"
+              },
+              "description": "Wait for page stability"
+            }
+          ],
+          "assertions": [
+            {
+              "type": "visible",
+              "target": {
+                "id": "el-mlnh4hmu-8xaqwh",
+                "role": "heading",
+                "name": "Welcome to Libero Test App",
+                "selector": {
+                  "primary": "h1:has-text(\"Welcome to Libero Test App\"), h2:has-text(\"Welcome to Libero Test App\"), h3:has-text(\"Welcome to Libero Test App\")",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "css"
+                },
+                "type": "heading",
+                "attributes": {},
+                "text": "Welcome to Libero Test App",
+                "confidence": 0.8
+              },
+              "description": "Heading \"Welcome to Libero Test App\" should be visible"
+            },
+            {
+              "type": "url",
+              "target": "/",
+              "expected": "/",
+              "operator": "contains",
+              "description": "URL should contain route"
+            }
+          ],
+          "tags": [
+            "smoke",
+            "navigation",
+            "/"
+          ],
+          "priority": "critical",
+          "estimatedDuration": 3000
+        },
+        {
+          "id": "test-mlnh59ky-g3u8q3",
+          "name": "[Smoke] About Libero Quantum - Page loads and heading visible",
+          "description": "Navigate to About Libero Quantum and verify basic content",
+          "flow": [
+            {
+              "id": "step-mlnh59ky-84ciui",
+              "action": "navigate",
+              "target": "http://localhost:5174/about",
+              "description": "Navigate to About Libero Quantum"
+            },
+            {
+              "id": "step-mlnh59ky-iha1jd",
+              "action": "wait",
+              "options": {
+                "timeout": 2000,
+                "waitFor": "networkidle"
+              },
+              "description": "Wait for page stability"
+            }
+          ],
+          "assertions": [
+            {
+              "type": "visible",
+              "target": {
+                "id": "el-mlnh4i9q-nx9mne",
+                "role": "heading",
+                "name": "About Libero Quantum",
+                "selector": {
+                  "primary": "h1:has-text(\"About Libero Quantum\"), h2:has-text(\"About Libero Quantum\"), h3:has-text(\"About Libero Quantum\")",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "css"
+                },
+                "type": "heading",
+                "attributes": {},
+                "text": "About Libero Quantum",
+                "confidence": 0.8
+              },
+              "description": "Heading \"About Libero Quantum\" should be visible"
+            },
+            {
+              "type": "url",
+              "target": "/about",
+              "expected": "/about",
+              "operator": "contains",
+              "description": "URL should contain route"
+            }
+          ],
+          "tags": [
+            "smoke",
+            "navigation",
+            "/about"
+          ],
+          "priority": "critical",
+          "estimatedDuration": 3000
+        },
+        {
+          "id": "test-mlnh59ky-aeqguz",
+          "name": "[Smoke] Contact Us - Page loads and heading visible",
+          "description": "Navigate to Contact Us and verify basic content",
+          "flow": [
+            {
+              "id": "step-mlnh59ky-ix3hgz",
+              "action": "navigate",
+              "target": "http://localhost:5174/contact",
+              "description": "Navigate to Contact Us"
+            },
+            {
+              "id": "step-mlnh59ky-p7ywgk",
+              "action": "wait",
+              "options": {
+                "timeout": 2000,
+                "waitFor": "networkidle"
+              },
+              "description": "Wait for page stability"
+            }
+          ],
+          "assertions": [
+            {
+              "type": "visible",
+              "target": {
+                "id": "el-mlnh4iug-ypyy92",
+                "role": "heading",
+                "name": "Contact Us",
+                "selector": {
+                  "primary": "h1:has-text(\"Contact Us\"), h2:has-text(\"Contact Us\"), h3:has-text(\"Contact Us\")",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "css"
+                },
+                "type": "heading",
+                "attributes": {},
+                "text": "Contact Us",
+                "confidence": 0.8
+              },
+              "description": "Heading \"Contact Us\" should be visible"
+            },
+            {
+              "type": "url",
+              "target": "/contact",
+              "expected": "/contact",
+              "operator": "contains",
+              "description": "URL should contain route"
+            }
+          ],
+          "tags": [
+            "smoke",
+            "navigation",
+            "/contact"
+          ],
+          "priority": "critical",
+          "estimatedDuration": 3000
+        },
+        {
+          "id": "test-mlnh59ky-t3ccb2",
+          "name": "[Smoke] Dashboard - Page loads and heading visible",
+          "description": "Navigate to Dashboard and verify basic content",
+          "flow": [
+            {
+              "id": "step-mlnh59ky-z1xr7k",
+              "action": "navigate",
+              "target": "http://localhost:5174/dashboard",
+              "description": "Navigate to Dashboard"
+            },
+            {
+              "id": "step-mlnh59ky-u2hkl0",
+              "action": "wait",
+              "options": {
+                "timeout": 2000,
+                "waitFor": "networkidle"
+              },
+              "description": "Wait for page stability"
+            }
+          ],
+          "assertions": [
+            {
+              "type": "visible",
+              "target": {
+                "id": "el-mlnh4jee-xyqja5",
+                "role": "heading",
+                "name": "Dashboard",
+                "selector": {
+                  "primary": "h1:has-text(\"Dashboard\"), h2:has-text(\"Dashboard\"), h3:has-text(\"Dashboard\")",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "css"
+                },
+                "type": "heading",
+                "attributes": {},
+                "text": "Dashboard",
+                "confidence": 0.8
+              },
+              "description": "Heading \"Dashboard\" should be visible"
+            },
+            {
+              "type": "url",
+              "target": "/dashboard",
+              "expected": "/dashboard",
+              "operator": "contains",
+              "description": "URL should contain route"
+            }
+          ],
+          "tags": [
+            "smoke",
+            "navigation",
+            "/dashboard"
+          ],
+          "priority": "critical",
+          "estimatedDuration": 3000
+        },
+        {
+          "id": "test-mlnh59ky-37ehgb",
+          "name": "[Smoke] Welcome to Libero Test App - Primary action clickable",
+          "description": "Verify primary button on Welcome to Libero Test App is interactive",
+          "flow": [
+            {
+              "id": "step-mlnh59ky-liwt0e",
+              "action": "navigate",
+              "target": "http://localhost:5174",
+              "description": "Navigate to Welcome to Libero Test App"
+            },
+            {
+              "id": "step-mlnh59ky-cu6f6t",
+              "action": "click",
+              "target": {
+                "id": "el-mlnh4gzm-mfkjjc",
+                "role": "button",
+                "name": "Get Started →",
+                "selector": {
+                  "primary": "[data-testid=\"submit-btn\"]",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "data-testid"
+                },
+                "type": "button",
+                "attributes": {
+                  "type": "submit",
+                  "data-testid": "submit-btn"
+                },
+                "text": "Get Started →",
+                "confidence": 0.8
+              },
+              "description": "Click \"Get Started →\"",
+              "options": {
+                "timeout": 3000
+              }
+            }
+          ],
+          "assertions": [
+            {
+              "type": "visible",
+              "target": {
+                "id": "el-mlnh4gzm-mfkjjc",
+                "role": "button",
+                "name": "Get Started →",
+                "selector": {
+                  "primary": "[data-testid=\"submit-btn\"]",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "data-testid"
+                },
+                "type": "button",
+                "attributes": {
+                  "type": "submit",
+                  "data-testid": "submit-btn"
+                },
+                "text": "Get Started →",
+                "confidence": 0.8
+              },
+              "description": "Button should be visible and clickable"
+            }
+          ],
+          "tags": [
+            "smoke",
+            "interaction",
+            "/"
+          ],
+          "priority": "high",
+          "estimatedDuration": 4000
+        },
+        {
+          "id": "test-mlnh59kz-2dvixk",
+          "name": "[Smoke] Welcome to Libero Test App - Primary action clickable",
+          "description": "Verify primary button on Welcome to Libero Test App is interactive",
+          "flow": [
+            {
+              "id": "step-mlnh59kz-hc97c2",
+              "action": "navigate",
+              "target": "http://localhost:5174/",
+              "description": "Navigate to Welcome to Libero Test App"
+            },
+            {
+              "id": "step-mlnh59kz-f9m4dy",
+              "action": "click",
+              "target": {
+                "id": "el-mlnh4hlv-usn73y",
+                "role": "button",
+                "name": "Get Started →",
+                "selector": {
+                  "primary": "[data-testid=\"submit-btn\"]",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "data-testid"
+                },
+                "type": "button",
+                "attributes": {
+                  "type": "submit",
+                  "data-testid": "submit-btn"
+                },
+                "text": "Get Started →",
+                "confidence": 0.8
+              },
+              "description": "Click \"Get Started →\"",
+              "options": {
+                "timeout": 3000
+              }
+            }
+          ],
+          "assertions": [
+            {
+              "type": "visible",
+              "target": {
+                "id": "el-mlnh4hlv-usn73y",
+                "role": "button",
+                "name": "Get Started →",
+                "selector": {
+                  "primary": "[data-testid=\"submit-btn\"]",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "data-testid"
+                },
+                "type": "button",
+                "attributes": {
+                  "type": "submit",
+                  "data-testid": "submit-btn"
+                },
+                "text": "Get Started →",
+                "confidence": 0.8
+              },
+              "description": "Button should be visible and clickable"
+            }
+          ],
+          "tags": [
+            "smoke",
+            "interaction",
+            "/"
+          ],
+          "priority": "high",
+          "estimatedDuration": 4000
+        },
+        {
+          "id": "test-mlnh59kz-awt3db",
+          "name": "[Smoke] Contact Us - Primary action clickable",
+          "description": "Verify primary button on Contact Us is interactive",
+          "flow": [
+            {
+              "id": "step-mlnh59kz-nrgs84",
+              "action": "navigate",
+              "target": "http://localhost:5174/contact",
+              "description": "Navigate to Contact Us"
+            },
+            {
+              "id": "step-mlnh59kz-2enjzw",
+              "action": "click",
+              "target": {
+                "id": "el-mlnh4itg-lmftan",
+                "role": "button",
+                "name": "Send Message",
+                "selector": {
+                  "primary": "[data-testid=\"send-btn\"]",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "data-testid"
+                },
+                "type": "button",
+                "attributes": {
+                  "type": "submit",
+                  "data-testid": "send-btn"
+                },
+                "text": "Send Message",
+                "confidence": 0.8
+              },
+              "description": "Click \"Send Message\"",
+              "options": {
+                "timeout": 3000
+              }
+            }
+          ],
+          "assertions": [
+            {
+              "type": "visible",
+              "target": {
+                "id": "el-mlnh4itg-lmftan",
+                "role": "button",
+                "name": "Send Message",
+                "selector": {
+                  "primary": "[data-testid=\"send-btn\"]",
+                  "fallbacks": [],
+                  "stability": 0.5,
+                  "type": "data-testid"
+                },
+                "type": "button",
+                "attributes": {
+                  "type": "submit",
+                  "data-testid": "send-btn"
+                },
+                "text": "Send Message",
+                "confidence": 0.8
+              },
+              "description": "Button should be visible and clickable"
+            }
+          ],
+          "tags": [
+            "smoke",
+            "interaction",
+            "/contact"
+          ],
+          "priority": "high",
+          "estimatedDuration": 4000
+        }
+      ],
+      "tags": [
+        "smoke",
+        "critical"
+      ]
+    }
+  ],
+  "config": {
+    "seed": 1771143560388,
+    "coverageTarget": {
+      "routes": 5,
+      "interactiveElements": 23,
+      "assertions": 16
+    },
+    "flakyRetries": 2,
+    "screenshotOnFail": true,
+    "videoOnFail": false,
+    "traceOnFail": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@libero/runner",
+  "version": "6.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@libero/core": "*",
+    "playwright": "^1.40.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2",
+    "@types/node": "^22.19.11"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "version": "6.0.0",
+  "mapping": {
+    "method": "hybrid",
+    "maxDepth": 3,
+    "maxPages": 50,
+    "timeout": 30000,
+    "followExternalLinks": false,
+    "captureScreenshots": true
+  },
+  "generation": {
+    "categories": [
+      "smoke",
+      "regression"
+    ],
+    "coverageTargets": {
+      "routes": 90,
+      "elements": 70,
+      "assertions": 2
+    },
+    "edgeCases": true,
+    "visualRegression": false,
+    "accessibility": false
+  },
+  "execution": {
+    "runner": "playwright",
+    "browsers": [
+      "chromium"
+    ],
+    "headless": true,
+    "parallel": true,
+    "workers": 4,
+    "retries": 2,
+    "timeout": 30000,
+    "screenshotOnFail": true,
+    "videoOnFail": false,
+    "traceOnFail": true
+  },
+  "reporting": {
+    "formats": [
+      "html",
+      "json"
+    ],
+    "outputDir": ".libero/reports",
+    "openOnComplete": false,
+    "includeArtifacts": true
+  },
+  "learning": {
+    "enabled": true,
+    "kbPath": ".libero/knowledge-base.db",
+    "autoHeal": false,
+    "autoHealConfidenceThreshold": 0.85,
+    "trackFlaky": true,
+    "adaptiveExploration": true
+  },
+  "auth": {
+    "strategy": "none"
+  },
+  "appName": "react-vite",
+  "baseUrl": "http://localhost:5174",
+  "framework": "react"
+}
