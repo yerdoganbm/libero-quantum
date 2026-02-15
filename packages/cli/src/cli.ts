@@ -31,17 +31,22 @@ program
   .option('--deep-forms', 'Enable deep form extraction (constraints + validation hints)')
   .action((opts) => mapCommand({ depth: parseInt(opts.depth), pages: parseInt(opts.pages), auth: opts.auth, deepForms: Boolean(opts.deepForms) }));
 
+
 program
   .command('generate')
   .description('Generate test plans from AppGraph')
   .option('-s, --seed <number>', 'Random seed for deterministic tests')
   .option('-t, --type <types>', 'Test types: smoke,form,journey,crud,a11y (default: smoke,form)')
   .option('-c, --coverage <0-100>', 'Coverage target percentage; generate until met (uses orchestrator)')
-  .action((opts) => generateCommand({
-    seed: opts.seed ? parseInt(opts.seed) : undefined,
-    type: opts.type,
-    coverage: opts.coverage != null ? parseFloat(opts.coverage) : undefined,
-  }));
+  .option('--ai-mode <mode>', 'AI mode: off | assist | autopilot')
+  .action((opts) =>
+    generateCommand({
+      seed: opts.seed ? parseInt(opts.seed, 10) : undefined,
+      type: opts.type,
+      coverage: opts.coverage != null ? parseFloat(opts.coverage) : undefined,
+      aiMode: opts.aiMode,
+    })
+  );
 
 program
   .command('run')
@@ -52,6 +57,7 @@ program
   .option('-w, --workers <number>', 'Number of parallel workers (default: 1)')
   .option('-b, --browser <name>', 'Browser for selenium: chrome|firefox|edge')
   .option('--grid-url <url>', 'Selenium Grid remote URL')
+
   .action((opts) => runCommand({ 
     plan: opts.plan, 
     headless: !opts.headed, 
@@ -68,17 +74,18 @@ program
   .option('--headed', 'Run in headed mode')
   .option('--quick', 'Shortcut for quick mode (depth 2, pages 20, smoke+form)')
   .option('--full', 'Shortcut for full mode (depth 3, pages 50, all tests + coverage)')
+  .option('--ai-mode <mode>', 'AI mode: off | assist | autopilot')
   .action(async (opts) => {
     const mode = opts.quick ? 'quick' : opts.full ? 'full' : opts.mode;
-    
+
     if (mode === 'quick') {
-      await mapCommand({ depth: 2, pages: 20 });
-      await generateCommand({ type: 'smoke,form' });
+      await mapCommand({ depth: 2, pages: 20, aiMode: opts.aiMode });
+      await generateCommand({ type: 'smoke,form', aiMode: opts.aiMode });
     } else {
-      await mapCommand({ depth: 3, pages: 50 });
-      await generateCommand({ type: 'smoke,form,journey,crud,a11y', coverage: 80 });
+      await mapCommand({ depth: 3, pages: 50, aiMode: opts.aiMode });
+      await generateCommand({ type: 'smoke,form,journey,crud,a11y', coverage: 80, aiMode: opts.aiMode });
     }
-    
+
     await runCommand({ headless: !opts.headed });
   });
 

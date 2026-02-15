@@ -82,7 +82,7 @@ npx libero map --depth 5 --pages 100
 
 # Deep form extraction (constraints + validation hints)
 npx libero map --deep-forms
-```
+
 
 ### 4. Generate Tests
 
@@ -98,6 +98,9 @@ npx libero generate --coverage 90
 
 # With seed for reproducibility
 npx libero generate --seed 12345
+
+# AI autopilot generation profile
+npx libero generate --ai-mode autopilot
 ```
 
 ### 5. Run Tests
@@ -127,11 +130,31 @@ npx libero test --quick
 
 # Full mode: all generators + coverage
 npx libero test --full
+
+# Full pipeline with AI assist presets
+npx libero test --full --ai-mode assist
 ```
 
 ---
 
 ## 📝 Configuration
+
+### AI Mode Presets
+
+```json
+{
+  "ai": {
+    "mode": "off"
+  }
+}
+```
+
+Modes:
+- `off`: keep explicit/manual config behavior only.
+- `assist`: enables deep forms + invalid form variants + healing/adaptive learning defaults.
+- `autopilot`: everything in `assist` plus stronger coverage targets and minimum parallelism.
+
+CLI overrides config via `--ai-mode off|assist|autopilot` for `map`, `generate`, and `test`.
 
 ### Auth Strategies
 
