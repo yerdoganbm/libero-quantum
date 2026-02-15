@@ -18,6 +18,8 @@ export interface SeleniumAdapterOptions {
   screenshotOnFail: boolean;
   artifactsDir: string;
   browser: 'chrome' | 'firefox' | 'edge';
+  gridUrl?: string;
+  capabilities?: Record<string, any>;
   knowledgeBasePath?: string;
   enableHealing?: boolean;
 }
@@ -37,17 +39,7 @@ export class SeleniumAdapter {
       this.kb = new KnowledgeBase(options.knowledgeBasePath);
     }
 
-    // Build driver
-    const chromeOptions = new chrome.Options();
-    if (options.headless) {
-      chromeOptions.addArguments('--headless=new', '--disable-gpu');
-    }
-    chromeOptions.addArguments('--no-sandbox', '--disable-dev-shm-usage');
-
-    this.driver = await new Builder()
-      .forBrowser(options.browser)
-      .setChromeOptions(chromeOptions)
-      .build();
+    this.driver = await this.buildDriver(options);
 
     await this.driver.manage().setTimeouts({ implicit: 1000, pageLoad: options.timeout, script: options.timeout });
 
@@ -95,6 +87,35 @@ export class SeleniumAdapter {
     };
   }
 
+
+
+  private async buildDriver(options: SeleniumAdapterOptions): Promise<WebDriver> {
+    const builder = new Builder().forBrowser(options.browser);
+
+    if (options.gridUrl) {
+      const remoteCaps = {
+        browserName: options.browser,
+        ...(options.capabilities || {}),
+      };
+
+      return builder
+        .usingServer(options.gridUrl)
+        .withCapabilities(remoteCaps as any)
+        .build();
+    }
+
+    const chromeOptions = new chrome.Options();
+    if (options.headless) {
+      chromeOptions.addArguments('--headless=new', '--disable-gpu');
+    }
+    chromeOptions.addArguments('--no-sandbox', '--disable-dev-shm-usage');
+
+    if (options.browser === 'chrome') {
+      builder.setChromeOptions(chromeOptions);
+    }
+
+    return builder.build();
+  }
   private async executeSuite(suite: TestSuite, options: SeleniumAdapterOptions): Promise<SuiteResult> {
     const testResults: TestResult[] = [];
 
@@ -150,7 +171,7 @@ export class SeleniumAdapter {
 
         if (this.kb) {
           const errorType = classifyError(String(e));
-            this.kb.recordFailure({
+            await this.kb.recordFailure({
               testId: testCase.id,
               testName: testCase.name,
               route: testCase.tags.find((t) => t.startsWith('/')) || undefined,
@@ -170,6 +191,8 @@ export class SeleniumAdapter {
       }
     }
 
+    let screenshotOnError: string | undefined;
+
     if (error && retries > options.retries) {
       status = 'fail';
 
@@ -183,6 +206,7 @@ export class SeleniumAdapter {
         if (screenshot) {
           fs.writeFileSync(screenshotPath, screenshot, 'base64');
           artifacts.push(screenshotPath);
+          screenshotOnError = screenshotPath;
         }
       }
     }
@@ -199,6 +223,7 @@ export class SeleniumAdapter {
         ? {
             message: String(error),
             stack: error.stack,
+            screenshot: screenshotOnError,
           }
         : undefined,
       artifacts,

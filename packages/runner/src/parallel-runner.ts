@@ -20,14 +20,34 @@ export class ParallelRunner {
     const workers = Math.min(options.workers, plan.suites.length);
     logger.info(`Running tests with ${workers} parallel workers`);
 
+    if (workers <= 0) {
+      return {
+        runId: `parallel-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        config: {
+          runner: options.runner,
+          parallel: true,
+          workers: 0,
+          retries: (options.adapterOptions as any).retries ?? 0,
+          timeout: (options.adapterOptions as any).timeout ?? 30000,
+          browser: this.resolveBrowser(options),
+          headless: (options.adapterOptions as any).headless ?? true,
+          baseUrl: (options.adapterOptions as any).baseUrl ?? '',
+        },
+        suites: [],
+        summary: this.calculateSummary([]),
+        artifacts: { screenshots: [], videos: [], traces: [], logs: [], reports: [] },
+        duration: 0,
+      };
+    }
+
     const suiteQueue = [...plan.suites];
     const suiteResults: SuiteResult[] = [];
     const startTime = Date.now();
 
-    // Create worker pool
     const workerPromises: Promise<void>[] = [];
     for (let i = 0; i < workers; i++) {
-      workerPromises.push(this.workerLoop(i, suiteQueue, suiteResults, options));
+      workerPromises.push(this.workerLoop(i, suiteQueue, suiteResults, options, plan));
     }
 
     await Promise.all(workerPromises);
@@ -44,11 +64,11 @@ export class ParallelRunner {
         runner: options.runner,
         parallel: true,
         workers,
-        retries: (options.adapterOptions as any).retries || 0,
-        timeout: (options.adapterOptions as any).timeout || 30000,
-        browser: 'chromium',
-        headless: (options.adapterOptions as any).headless || true,
-        baseUrl: (options.adapterOptions as any).baseUrl || '',
+        retries: (options.adapterOptions as any).retries ?? 0,
+        timeout: (options.adapterOptions as any).timeout ?? 30000,
+        browser: this.resolveBrowser(options),
+        headless: (options.adapterOptions as any).headless ?? true,
+        baseUrl: (options.adapterOptions as any).baseUrl ?? '',
       },
       suites: suiteResults,
       summary,
@@ -67,7 +87,8 @@ export class ParallelRunner {
     workerId: number,
     suiteQueue: TestSuite[],
     results: SuiteResult[],
-    options: ParallelRunnerOptions
+    options: ParallelRunnerOptions,
+    fullPlan: TestPlan
   ): Promise<void> {
     while (suiteQueue.length > 0) {
       const suite = suiteQueue.shift();
@@ -76,17 +97,25 @@ export class ParallelRunner {
       logger.info(`[Worker ${workerId}] Executing suite: ${suite.name}`);
 
       try {
-        // Create adapter per worker
+        const singleSuitePlan: TestPlan = {
+          version: fullPlan.version,
+          appName: fullPlan.appName,
+          timestamp: fullPlan.timestamp,
+          envMatrix: fullPlan.envMatrix,
+          config: fullPlan.config,
+          suites: [suite],
+        };
+
+        const workerOptions = this.buildWorkerScopedOptions(options, workerId);
+
         let suiteResult: SuiteResult;
         if (options.runner === 'selenium') {
           const adapter = new SeleniumAdapter();
-          const singleSuitePlan = { ...{} as TestPlan, suites: [suite] };
-          const result = await adapter.execute(singleSuitePlan, options.adapterOptions as SeleniumAdapterOptions);
+          const result = await adapter.execute(singleSuitePlan, workerOptions as SeleniumAdapterOptions);
           suiteResult = result.suites[0];
         } else {
           const adapter = new PlaywrightAdapter();
-          const singleSuitePlan = { ...{} as TestPlan, suites: [suite] };
-          const result = await adapter.execute(singleSuitePlan, options.adapterOptions as PlaywrightAdapterOptions);
+          const result = await adapter.execute(singleSuitePlan, workerOptions as PlaywrightAdapterOptions);
           suiteResult = result.suites[0];
         }
 
@@ -98,7 +127,24 @@ export class ParallelRunner {
     }
   }
 
-  private calculateSummary(suites: SuiteResult[]): any {
+  private buildWorkerScopedOptions(options: ParallelRunnerOptions, workerId: number): PlaywrightAdapterOptions | SeleniumAdapterOptions {
+    const base = options.adapterOptions as any;
+    const artifactsDir = typeof base.artifactsDir === 'string' ? `${base.artifactsDir}/worker-${workerId}` : base.artifactsDir;
+
+    return {
+      ...base,
+      artifactsDir,
+    } as PlaywrightAdapterOptions | SeleniumAdapterOptions;
+  }
+
+  private resolveBrowser(options: ParallelRunnerOptions): string {
+    if (options.runner === 'selenium') {
+      return ((options.adapterOptions as SeleniumAdapterOptions).browser ?? 'chrome') as string;
+    }
+    return 'chromium';
+  }
+
+  private calculateSummary(suites: SuiteResult[]): RunResult['summary'] {
     const totalTests = suites.reduce((sum, s) => sum + s.tests.length, 0);
     const passed = suites.reduce((sum, s) => sum + s.passed, 0);
     const failed = suites.reduce((sum, s) => sum + s.failed, 0);

@@ -171,6 +171,8 @@ export class PlaywrightAdapter {
       }
     }
 
+    let screenshotOnError: string | undefined;
+
     if (error && retries > options.retries) {
       status = 'fail';
       
@@ -183,6 +185,7 @@ export class PlaywrightAdapter {
         const screenshotPath = path.join(options.artifactsDir, `${testCase.id}-fail.png`);
         await page.screenshot({ path: screenshotPath }).catch(() => null);
         artifacts.push(screenshotPath);
+        screenshotOnError = screenshotPath;
       }
     }
 
@@ -199,6 +202,7 @@ export class PlaywrightAdapter {
       error: error ? {
         message: String(error),
         stack: error.stack,
+        screenshot: screenshotOnError,
       } : undefined,
       artifacts,
     };
