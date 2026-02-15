@@ -28,7 +28,8 @@ program
   .option('-d, --depth <number>', 'Max crawl depth', '3')
   .option('-p, --pages <number>', 'Max pages to crawl', '50')
   .option('-a, --auth <strategy>', 'Auth strategy: cookie | localStorage | loginForm | custom')
-  .action((opts) => mapCommand({ depth: parseInt(opts.depth), pages: parseInt(opts.pages), auth: opts.auth }));
+  .option('--deep-forms', 'Enable deep form extraction (constraints + validation hints)')
+  .action((opts) => mapCommand({ depth: parseInt(opts.depth), pages: parseInt(opts.pages), auth: opts.auth, deepForms: Boolean(opts.deepForms) }));
 
 program
   .command('generate')

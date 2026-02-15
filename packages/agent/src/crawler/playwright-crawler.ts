@@ -3,7 +3,7 @@
  */
 
 import { chromium, type Browser, type Page } from 'playwright';
-import { AppNode, AppEdge, ElementDescriptor } from '@libero/core';
+import { AppNode, AppEdge, ElementDescriptor, FormDescriptor, FormField, ValidationRule } from '@libero/core';
 import { logger, hashString, generateId } from '@libero/core';
 import { getAuthStrategy } from '../auth/auth-strategies';
 
@@ -15,6 +15,7 @@ export interface CrawlOptions {
   headless: boolean;
   captureScreenshots: boolean;
   authStrategy?: { name: string; config: any };
+  deepFormExtraction?: boolean;
 }
 
 export class PlaywrightCrawler {
@@ -70,7 +71,7 @@ export class PlaywrightCrawler {
 
       // Extract elements
       const elements = await this.extractElements(page);
-      const forms = await this.extractForms(page);
+      const forms = await this.extractForms(page, options.deepFormExtraction ?? false);
       
       // Create node
       const nodeId = this.normalizeUrl(url);
@@ -179,110 +180,200 @@ export class PlaywrightCrawler {
     return elements;
   }
 
-  private async extractForms(page: Page): Promise<any[]> {
-    const forms = await page.evaluate(() => {
-      const formElements = Array.from(document.querySelectorAll('form'));
-      return formElements.map((form, idx) => {
-        const inputs = Array.from(form.querySelectorAll('input, textarea, select'));
-        const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]') || 
-                         form.querySelector('button:not([type="button"])');
-        
-        const fields = inputs.map(input => {
-          const inp = input as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+  private async extractForms(page: Page, deepFormExtraction: boolean): Promise<FormDescriptor[]> {
+    const forms = await page.evaluate((deep) => {
+      const extractLabel = (input: Element): string => {
+        const htmlInput = input as HTMLInputElement;
+        const byLabels = htmlInput.labels?.[0]?.textContent?.trim();
+        if (byLabels) return byLabels;
+
+        const id = input.getAttribute('id');
+        if (id) {
+          const forLabel = document.querySelector(`label[for="${id}"]`);
+          if (forLabel?.textContent) return forLabel.textContent.trim();
+        }
+
+        const parentLabel = input.closest('label');
+        return parentLabel?.textContent?.trim() || '';
+      };
+
+      return Array.from(document.querySelectorAll('form')).map((form, formIndex) => {
+        const controls = Array.from(form.querySelectorAll('input, textarea, select'));
+        const submitBtn =
+          form.querySelector('button[type="submit"], input[type="submit"]') ||
+          form.querySelector('button:not([type="button"])');
+
+        const getFormSelector = (): string => {
+          const testId = form.getAttribute('data-testid');
+          if (testId) return `[data-testid="${testId}"]`;
+          if (form.id) return `#${form.id}`;
+          return `form:nth-of-type(${formIndex + 1})`;
+        };
+
+        const fields = controls.map((control, controlIndex) => {
+          const el = control as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+          const rawType = control.tagName.toLowerCase() === 'select' ? 'select' : el.type || 'text';
+          const id = el.id || '';
+          const name = el.getAttribute('name') || '';
+          const placeholder = (el as HTMLInputElement).placeholder || '';
+          const testId = el.getAttribute('data-testid') || '';
+          const ariaLabel = el.getAttribute('aria-label') || '';
+          const label = extractLabel(control);
+          const selector = testId
+            ? `[data-testid="${testId}"]`
+            : id
+            ? `#${id}`
+            : name
+            ? `[name="${name}"]`
+            : `${control.tagName.toLowerCase()}:nth-of-type(${controlIndex + 1})`;
+
+          const validationHints = [
+            control.getAttribute('aria-invalid') === 'true' ? 'aria-invalid' : '',
+            (el as HTMLInputElement).required ? 'required' : '',
+            control.getAttribute('pattern') ? 'pattern' : '',
+            control.getAttribute('minlength') ? 'minlength' : '',
+            control.getAttribute('maxlength') ? 'maxlength' : '',
+          ].filter(Boolean);
+
+          const constraints = deep
+            ? {
+                minLength: (() => {
+                  const value = control.getAttribute('minlength');
+                  return value != null ? Number(value) : undefined;
+                })(),
+                maxLength: (() => {
+                  const value = control.getAttribute('maxlength');
+                  return value != null ? Number(value) : undefined;
+                })(),
+                min: (() => {
+                  const value = control.getAttribute('min');
+                  return value != null ? Number(value) : undefined;
+                })(),
+                max: (() => {
+                  const value = control.getAttribute('max');
+                  return value != null ? Number(value) : undefined;
+                })(),
+                pattern: control.getAttribute('pattern') || undefined,
+                step: control.getAttribute('step') || undefined,
+              }
+            : undefined;
+
           return {
-            tag: input.tagName.toLowerCase(),
-            type: inp.type || 'text',
-            name: inp.name || inp.id || '',
-            id: inp.id || '',
-            placeholder: (inp as HTMLInputElement).placeholder || '',
-            required: (inp as HTMLInputElement).required || false,
-            testId: input.getAttribute('data-testid') || '',
-            label: (input as HTMLInputElement).labels?.[0]?.textContent?.trim() || '',
+            id: `${formIndex}-${controlIndex}-${name || id || rawType}`,
+            tag: control.tagName.toLowerCase(),
+            type: rawType,
+            name,
+            domId: id,
+            placeholder,
+            required: (el as HTMLInputElement).required || false,
+            testId,
+            label: label || ariaLabel,
+            selector,
+            constraints,
+            validationHints,
           };
         });
-        
+
         return {
-          index: idx,
+          id: `${formIndex}-${form.id || form.getAttribute('data-testid') || 'anonymous'}`,
+          selector: getFormSelector(),
           testId: form.getAttribute('data-testid') || '',
-          id: form.id || '',
-          action: form.action || '',
-          method: form.method || 'POST',
+          domId: form.id || '',
+          action: form.getAttribute('action') || '',
+          method: form.getAttribute('method') || 'POST',
           fields,
-          hasSubmit: !!submitBtn,
+          hasSubmit: Boolean(submitBtn),
+          submitLabel: submitBtn?.textContent?.trim() || '',
           submitTestId: submitBtn?.getAttribute('data-testid') || '',
         };
       });
-    });
+    }, deepFormExtraction);
 
-    return forms.map((form: any) => {
-      const fields = form.fields.map((f: any) => ({
-        name: f.name || f.id || `field-${f.tag}-${Math.random().toString(36).slice(2, 8)}`,
-        type: this.mapInputType(f.type, f.tag),
+    return forms.map((form): FormDescriptor => {
+      const fields: FormField[] = form.fields.map((field: any) => ({
+        name: field.name || field.domId || `field-${field.id}`,
+        type: this.mapInputType(field.type, field.tag),
         selector: {
-          primary: f.testId ? `[data-testid="${f.testId}"]` : f.id ? `#${f.id}` : f.name ? `[name="${f.name}"]` : `${f.tag}[placeholder="${f.placeholder}"]`,
-          fallbacks: [],
-          stability: 0.6,
-          type: f.testId ? 'data-testid' : 'css',
+          primary: field.selector,
+          fallbacks: field.domId ? [`#${field.domId}`] : field.name ? [`[name="${field.name}"]`] : [],
+          stability: field.testId ? 0.95 : field.domId ? 0.8 : 0.6,
+          type: field.testId ? ('data-testid' as const) : field.domId ? ('css' as const) : ('label' as const),
         },
-        required: f.required,
-        placeholder: f.placeholder,
-        label: f.label,
+        required: Boolean(field.required),
+        placeholder: field.placeholder || undefined,
+        label: field.label || undefined,
+        constraints: field.constraints,
+        validationHints: field.validationHints,
       }));
 
-      const submitButton = form.hasSubmit ? {
-        id: generateId('btn'),
-        role: 'button',
-        name: 'Submit',
-        selector: {
-          primary: form.submitTestId ? `[data-testid="${form.submitTestId}"]` : `button[type="submit"]`,
-          fallbacks: [],
-          stability: 0.7,
-          type: form.submitTestId ? 'data-testid' : 'css',
-        },
-        type: 'button' as const,
-        attributes: { type: 'submit' },
-        confidence: 0.9,
-      } : undefined;
+      const submitButton = form.hasSubmit
+        ? {
+            id: generateId('btn'),
+            role: 'button',
+            name: form.submitLabel || 'Submit',
+            selector: {
+              primary: form.submitTestId ? `[data-testid="${form.submitTestId}"]` : `${form.selector} button[type="submit"]`,
+              fallbacks: [`${form.selector} input[type="submit"]`, `${form.selector} button:not([type="button"])`],
+              stability: form.submitTestId ? 0.95 : 0.7,
+              type: form.submitTestId ? ('data-testid' as const) : ('css' as const),
+            },
+            type: 'button' as const,
+            attributes: { type: 'submit' },
+            confidence: 0.9,
+          }
+        : undefined;
 
       return {
-        id: generateId('form'),
+        id: `form-${form.id}`,
         selector: {
-          primary: form.testId ? `[data-testid="${form.testId}"]` : form.id ? `#${form.id}` : `form:nth-of-type(${form.index + 1})`,
+          primary: form.selector,
           fallbacks: [],
-          stability: 0.6,
-          type: form.testId ? 'data-testid' : 'css',
+          stability: form.testId ? 0.95 : form.domId ? 0.8 : 0.6,
+          type: form.testId ? ('data-testid' as const) : ('css' as const),
         },
         fields,
         submitButton,
         validationRules: this.inferValidationRules(fields),
+        method: String(form.method || 'POST').toUpperCase(),
+        action: form.action || undefined,
       };
     });
   }
 
-  private mapInputType(type: string, tag: string): any {
-    const map: Record<string, any> = {
-      'email': 'email',
-      'password': 'password',
-      'tel': 'tel',
-      'number': 'number',
-      'url': 'url',
-      'date': 'date',
-      'checkbox': 'checkbox',
-      'radio': 'radio',
+  private mapInputType(type: string, tag: string): FormField['type'] {
+    const map: Record<string, FormField['type']> = {
+      email: 'email',
+      password: 'password',
+      tel: 'tel',
+      number: 'number',
+      url: 'url',
+      date: 'date',
+      checkbox: 'checkbox',
+      radio: 'radio',
     };
+
     if (tag === 'select') return 'select';
     if (tag === 'textarea') return 'text';
     return map[type] || 'text';
   }
 
-  private inferValidationRules(fields: any[]): any[] {
-    const rules: any[] = [];
+  private inferValidationRules(fields: FormField[]): ValidationRule[] {
+    const rules: ValidationRule[] = [];
     for (const field of fields) {
       if (field.required) {
         rules.push({ field: field.name, rule: 'required' });
       }
       if (field.type === 'email') {
         rules.push({ field: field.name, rule: 'email' });
+      }
+      if (field.constraints?.minLength != null) {
+        rules.push({ field: field.name, rule: 'min', message: String(field.constraints.minLength) });
+      }
+      if (field.constraints?.maxLength != null) {
+        rules.push({ field: field.name, rule: 'max', message: String(field.constraints.maxLength) });
+      }
+      if (field.constraints?.pattern) {
+        rules.push({ field: field.name, rule: 'pattern', message: field.constraints.pattern });
       }
     }
     return rules;
