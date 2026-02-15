@@ -7,7 +7,9 @@ import { AIMode, LiberoConfig, applyAIMode, logger, readJson, resolveAIMode, wri
 import * as path from 'path';
 
 
+
 export async function mapCommand(options: { depth?: number; pages?: number; auth?: string; deepForms?: boolean }): Promise<void> {
+
   logger.info('Starting application mapping...');
 
   const config = readJson<LiberoConfig>(path.join(process.cwd(), 'libero.config.json'));

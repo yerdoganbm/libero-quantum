@@ -2,6 +2,7 @@
  * libero generate - Generate test plans
  */
 
+
 import { AppGraph, TestSuite, LiberoConfig, logger, readJson, writeJson, generateId, migrateAppGraph } from '@libero/core';
 import { SmokeGenerator, FormGenerator, runOrchestrator } from '@libero/generator';
 
@@ -26,17 +27,18 @@ export async function generateCommand(options: {
   }
 
   const graph = migrateAppGraph(rawGraph);
-
   const seed = options.seed ?? Date.now();
 
   const configPath = path.join(process.cwd(), 'libero.config.json');
   const config = readJson<LiberoConfig>(configPath);
 
 
+
   let plan: { version: string; appName: string; timestamp: string; suites: TestSuite[]; config: any };
 
   if (options.coverage != null && options.coverage > 0) {
     const pct = options.coverage > 1 ? Math.min(100, options.coverage) : Math.round(options.coverage * 100);
+
 
 
     plan = runOrchestrator(graph, effectiveConfig, {
@@ -54,6 +56,7 @@ export async function generateCommand(options: {
     }
 
     if (types.includes('form')) {
+
       const formGen = new FormGenerator();
       const formVariantConfig = config?.generation?.formVariants;
       const formTests = formGen.generate(graph, {

@@ -32,6 +32,7 @@ program
   .action((opts) => mapCommand({ depth: parseInt(opts.depth), pages: parseInt(opts.pages), auth: opts.auth, deepForms: Boolean(opts.deepForms) }));
 
 
+
 program
   .command('generate')
   .description('Generate test plans from AppGraph')
@@ -57,7 +58,6 @@ program
   .option('-w, --workers <number>', 'Number of parallel workers (default: 1)')
   .option('-b, --browser <name>', 'Browser for selenium: chrome|firefox|edge')
   .option('--grid-url <url>', 'Selenium Grid remote URL')
-
   .action((opts) => runCommand({ 
     plan: opts.plan, 
     headless: !opts.headed, 
@@ -66,6 +66,7 @@ program
     browser: opts.browser,
     gridUrl: opts.gridUrl,
   }));
+
 
 program
   .command('test')
