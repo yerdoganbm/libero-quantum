@@ -2,7 +2,7 @@
  * libero generate - Generate test plans
  */
 
-import { AppGraph, TestSuite, LiberoConfig, logger, readJson, writeJson, generateId } from '@libero/core';
+import { AppGraph, TestSuite, LiberoConfig, AIMode, logger, readJson, writeJson, generateId, migrateAppGraph, resolveAIMode, applyAIMode } from '@libero/core';
 import { SmokeGenerator, FormGenerator, runOrchestrator } from '@libero/generator';
 import * as path from 'path';
 
@@ -10,28 +10,47 @@ export async function generateCommand(options: {
   seed?: number;
   type?: string;
   coverage?: number;
+  aiMode?: AIMode;
 }): Promise<void> {
   logger.info('Generating test plans...');
 
   const graphPath = path.join(process.cwd(), '.libero', 'app-graph', 'latest.json');
-  const graph = readJson<AppGraph>(graphPath);
+  const rawGraph = readJson<AppGraph>(graphPath);
 
-  if (!graph) {
+  if (!rawGraph) {
     logger.error('AppGraph not found. Run: npx libero map');
     process.exit(1);
   }
 
-  const types = options.type ? options.type.split(',').map((t) => t.trim()) : ['smoke', 'form'];
+  const graph = migrateAppGraph(rawGraph);
+
   const seed = options.seed ?? Date.now();
+
+  const configPath = path.join(process.cwd(), 'libero.config.json');
+  const config = readJson<LiberoConfig>(configPath);
+  const aiMode = resolveAIMode(options.aiMode, config);
+  const effectiveConfig = config ? applyAIMode(config, aiMode) : null;
+
+  if (aiMode !== 'off') {
+    logger.info(`AI mode active: ${aiMode}`);
+  }
+
+  const types = options.type
+    ? options.type.split(',').map((t) => t.trim())
+    : aiMode === 'autopilot'
+      ? ['smoke', 'form', 'journey', 'crud', 'a11y']
+      : aiMode === 'assist'
+        ? ['smoke', 'form', 'journey']
+        : ['smoke', 'form'];
 
   let plan: { version: string; appName: string; timestamp: string; suites: TestSuite[]; config: any };
 
-  if (options.coverage != null && options.coverage > 0) {
-    const pct = options.coverage > 1 ? Math.min(100, options.coverage) : Math.round(options.coverage * 100);
-    const configPath = path.join(process.cwd(), 'libero.config.json');
-    const config = readJson<LiberoConfig>(configPath);
+  const requestedCoverage = options.coverage ?? (aiMode === 'autopilot' ? 85 : aiMode === 'assist' ? 75 : undefined);
 
-    plan = runOrchestrator(graph, config ?? null, {
+  if (requestedCoverage != null && requestedCoverage > 0) {
+    const pct = requestedCoverage > 1 ? Math.min(100, requestedCoverage) : Math.round(requestedCoverage * 100);
+
+    plan = runOrchestrator(graph, effectiveConfig ?? null, {
       seed,
       scenarioTypes: types as Array<'smoke' | 'form' | 'journey'>,
       coverageTarget: { routes: pct, elements: pct, forms: pct, assertions: 2, flows: 3 },
@@ -48,7 +67,12 @@ export async function generateCommand(options: {
 
     if (types.includes('form')) {
       const formGen = new FormGenerator();
-      const formTests = formGen.generate(graph);
+      const formVariantConfig = effectiveConfig?.generation?.formVariants;
+      const formTests = formGen.generate(graph, {
+        seed,
+        includeBoundaryCases: formVariantConfig?.enabled ? formVariantConfig.includeBoundaryCases : false,
+        includeInvalidCases: formVariantConfig?.enabled ? formVariantConfig.includeInvalidCases : true,
+      });
       if (formTests.length > 0) {
         suites.push({
           id: generateId('suite'),
@@ -132,5 +156,5 @@ export async function generateCommand(options: {
   logger.info(`  Suites: ${plan.suites.length}`);
   logger.info(`  Tests: ${plan.suites.reduce((sum, s) => sum + s.tests.length, 0)}`);
   logger.info(`  Types: ${types.join(', ')}`);
-  if (options.coverage != null) logger.info(`  Coverage target: ${options.coverage}`);
+  if (requestedCoverage != null) logger.info(`  Coverage target: ${requestedCoverage}`);
 }

@@ -59,6 +59,8 @@ export interface FormDescriptor {
   fields: FormField[];
   submitButton?: ElementDescriptor;
   validationRules?: ValidationRule[];
+  method?: string;
+  action?: string;
 }
 
 export interface FormField {
@@ -68,6 +70,17 @@ export interface FormField {
   required: boolean;
   placeholder?: string;
   label?: string;
+  constraints?: FieldConstraints;
+  validationHints?: string[];
+}
+
+export interface FieldConstraints {
+  minLength?: number;
+  maxLength?: number;
+  min?: number;
+  max?: number;
+  pattern?: string;
+  step?: string;
 }
 
 export interface ValidationRule {

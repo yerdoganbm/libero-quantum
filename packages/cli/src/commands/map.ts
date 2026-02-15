@@ -2,12 +2,12 @@
  * libero map - Map application structure
  */
 
-import { LiberoConfig } from '@libero/core';
-import { logger, readJson, writeJson } from '@libero/core';
+import { LiberoConfig, AIMode } from '@libero/core';
+import { logger, readJson, writeJson, resolveAIMode, applyAIMode } from '@libero/core';
 import { PlaywrightCrawler, AppGraphBuilder } from '@libero/agent';
 import * as path from 'path';
 
-export async function mapCommand(options: { depth?: number; pages?: number; auth?: string }): Promise<void> {
+export async function mapCommand(options: { depth?: number; pages?: number; auth?: string; deepForms?: boolean; aiMode?: AIMode }): Promise<void> {
   logger.info('Starting application mapping...');
 
   // Load config
@@ -17,7 +17,14 @@ export async function mapCommand(options: { depth?: number; pages?: number; auth
     process.exit(1);
   }
 
-  const mappingConfig = config.mapping;
+  const aiMode = resolveAIMode(options.aiMode, config);
+  const effectiveConfig = applyAIMode(config, aiMode);
+
+  if (aiMode !== 'off') {
+    logger.info(`AI mode active: ${aiMode}`);
+  }
+
+  const mappingConfig = effectiveConfig.mapping;
   const crawler = new PlaywrightCrawler();
   
   const startTime = Date.now();
@@ -38,13 +45,14 @@ export async function mapCommand(options: { depth?: number; pages?: number; auth
 
   // Crawl
   const { nodes, edges } = await crawler.crawl({
-    baseUrl: config.baseUrl,
+    baseUrl: effectiveConfig.baseUrl,
     maxDepth: options.depth || mappingConfig.maxDepth,
     maxPages: options.pages || mappingConfig.maxPages,
     timeout: mappingConfig.timeout,
     headless: true,
     captureScreenshots: mappingConfig.captureScreenshots,
     authStrategy,
+    deepFormExtraction: options.deepForms || mappingConfig.deepFormExtraction || false,
   });
 
   const duration = Date.now() - startTime;
@@ -52,11 +60,11 @@ export async function mapCommand(options: { depth?: number; pages?: number; auth
   // Build AppGraph
   const builder = new AppGraphBuilder();
   const graph = builder.build(
-    config.appName,
-    config.baseUrl,
+    effectiveConfig.appName,
+    effectiveConfig.baseUrl,
     nodes,
     edges,
-    config.framework,
+    effectiveConfig.framework,
     duration
   );
 
