@@ -6,13 +6,10 @@ import { PlaywrightCrawler, AppGraphBuilder } from '@libero/agent';
 import { AIMode, LiberoConfig, applyAIMode, logger, readJson, resolveAIMode, writeJson } from '@libero/core';
 import * as path from 'path';
 
-export async function mapCommand(options: {
-  depth?: number;
-  pages?: number;
-  auth?: string;
-  deepForms?: boolean;
-  aiMode?: AIMode;
-}): Promise<void> {
+
+
+export async function mapCommand(options: { depth?: number; pages?: number; auth?: string; deepForms?: boolean }): Promise<void> {
+
   logger.info('Starting application mapping...');
 
   const config = readJson<LiberoConfig>(path.join(process.cwd(), 'libero.config.json'));
