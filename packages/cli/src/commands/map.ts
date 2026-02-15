@@ -2,15 +2,19 @@
  * libero map - Map application structure
  */
 
-import { LiberoConfig, AIMode } from '@libero/core';
-import { logger, readJson, writeJson, resolveAIMode, applyAIMode } from '@libero/core';
 import { PlaywrightCrawler, AppGraphBuilder } from '@libero/agent';
+import { AIMode, LiberoConfig, applyAIMode, logger, readJson, resolveAIMode, writeJson } from '@libero/core';
 import * as path from 'path';
 
-export async function mapCommand(options: { depth?: number; pages?: number; auth?: string; deepForms?: boolean; aiMode?: AIMode }): Promise<void> {
+export async function mapCommand(options: {
+  depth?: number;
+  pages?: number;
+  auth?: string;
+  deepForms?: boolean;
+  aiMode?: AIMode;
+}): Promise<void> {
   logger.info('Starting application mapping...');
 
-  // Load config
   const config = readJson<LiberoConfig>(path.join(process.cwd(), 'libero.config.json'));
   if (!config) {
     logger.error('libero.config.json not found. Run: npx libero init');
@@ -19,47 +23,35 @@ export async function mapCommand(options: { depth?: number; pages?: number; auth
 
   const aiMode = resolveAIMode(options.aiMode, config);
   const effectiveConfig = applyAIMode(config, aiMode);
-
-  if (aiMode !== 'off') {
-    logger.info(`AI mode active: ${aiMode}`);
-  }
+  if (aiMode !== 'off') logger.info(`AI mode active: ${aiMode}`);
 
   const mappingConfig = effectiveConfig.mapping;
   const crawler = new PlaywrightCrawler();
-  
   const startTime = Date.now();
 
-  // Determine auth strategy
   let authStrategy: { name: string; config: any } | undefined;
   if (options.auth) {
-    // CLI override: e.g. --auth=cookie or --auth=loginForm
-    const strategyName = options.auth;
-    authStrategy = { name: strategyName, config: config.auth || {} };
-  } else if (config.auth && config.auth.strategy !== 'none') {
-    // Use config auth
+    authStrategy = { name: options.auth, config: effectiveConfig.auth || {} };
+  } else if (effectiveConfig.auth && effectiveConfig.auth.strategy !== 'none') {
     authStrategy = {
-      name: config.auth.strategy,
-      config: config.auth,
+      name: effectiveConfig.auth.strategy,
+      config: effectiveConfig.auth,
     };
   }
 
-  // Crawl
   const { nodes, edges } = await crawler.crawl({
     baseUrl: effectiveConfig.baseUrl,
-    maxDepth: options.depth || mappingConfig.maxDepth,
-    maxPages: options.pages || mappingConfig.maxPages,
+    maxDepth: options.depth ?? mappingConfig.maxDepth,
+    maxPages: options.pages ?? mappingConfig.maxPages,
     timeout: mappingConfig.timeout,
     headless: true,
     captureScreenshots: mappingConfig.captureScreenshots,
     authStrategy,
-    deepFormExtraction: options.deepForms || mappingConfig.deepFormExtraction || false,
+    deepFormExtraction: options.deepForms ?? mappingConfig.deepFormExtraction ?? false,
   });
 
   const duration = Date.now() - startTime;
-
-  // Build AppGraph
-  const builder = new AppGraphBuilder();
-  const graph = builder.build(
+  const graph = new AppGraphBuilder().build(
     effectiveConfig.appName,
     effectiveConfig.baseUrl,
     nodes,
@@ -68,7 +60,6 @@ export async function mapCommand(options: { depth?: number; pages?: number; auth
     duration
   );
 
-  // Save
   const graphPath = path.join(process.cwd(), '.libero', 'app-graph', 'latest.json');
   writeJson(graphPath, graph);
 
