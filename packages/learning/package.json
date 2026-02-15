@@ -1,5 +1,5 @@
 {
-  "name": "@libero/reporting",
+  "name": "@libero/learning",
   "version": "6.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,11 +10,11 @@
   },
   "dependencies": {
     "@libero/core": "*",
-    "@libero/generator": "*",
-    "@libero/learning": "*"
+    "sql.js": "^1.10.3"
   },
   "devDependencies": {
     "typescript": "^5.8.2",
-    "@types/node": "^22.19.11"
+    "@types/node": "^22.19.11",
+    "@types/sql.js": "^1.4.9"
   }
 }

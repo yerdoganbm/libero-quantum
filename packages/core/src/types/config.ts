@@ -48,7 +48,9 @@ export interface GenerationConfig {
   coverageTargets: {
     routes: number;
     elements: number;
+    forms: number;
     assertions: number;
+    flows: number;
   };
   edgeCases: boolean;
   visualRegression: boolean;
@@ -121,7 +123,9 @@ export const DEFAULT_CONFIG: Partial<LiberoConfig> = {
     coverageTargets: {
       routes: 90,
       elements: 70,
+      forms: 80,
       assertions: 2,
+      flows: 3,
     },
     edgeCases: true,
     visualRegression: false,

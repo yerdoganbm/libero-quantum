@@ -34,9 +34,11 @@ program
   .description('Generate test plans from AppGraph')
   .option('-s, --seed <number>', 'Random seed for deterministic tests')
   .option('-t, --type <types>', 'Test types: smoke,form,journey (default: smoke,form)')
-  .action((opts) => generateCommand({ 
+  .option('-c, --coverage <0-100>', 'Coverage target percentage; generate until met (uses orchestrator)')
+  .action((opts) => generateCommand({
     seed: opts.seed ? parseInt(opts.seed) : undefined,
     type: opts.type,
+    coverage: opts.coverage != null ? parseFloat(opts.coverage) : undefined,
   }));
 
 program
@@ -44,7 +46,8 @@ program
   .description('Execute test plans')
   .option('-p, --plan <path>', 'Path to test plan')
   .option('--headed', 'Run in headed mode')
-  .action((opts) => runCommand({ plan: opts.plan, headless: !opts.headed }));
+  .option('-r, --runner <runner>', 'Test runner: playwright | selenium (default: playwright)')
+  .action((opts) => runCommand({ plan: opts.plan, headless: !opts.headed, runner: opts.runner }));
 
 program
   .command('test')

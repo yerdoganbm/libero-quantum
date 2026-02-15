@@ -17,6 +17,7 @@
     "@libero/generator": "*",
     "@libero/reporting": "*",
     "@libero/runner": "*",
+    "@libero/learning": "*",
     "chalk": "^5.6.2",
     "commander": "^11.1.0",
     "inquirer": "^9.3.8",

@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@libero/core": "*",
-    "playwright": "^1.40.0"
+    "@libero/learning": "*",
+    "playwright": "^1.40.0",
+    "selenium-webdriver": "^4.16.0"
   },
   "devDependencies": {
     "typescript": "^5.8.2",
-    "@types/node": "^22.19.11"
+    "@types/node": "^22.19.11",
+    "@types/selenium-webdriver": "^4.1.26"
   }
 }
